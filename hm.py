@@ -5,7 +5,7 @@ def group_by_heading( some_source ):
 	for line in some_source:
 		if re.match("(.*)(Test #)(.*)", line):
 			if buffer: yield buffer
-			buffer = [ line ]
+			buffer =  [ re.findall("[0-9]+",line) ] 
 		else:
 			buffer.append( line )
 	yield buffer
@@ -15,4 +15,4 @@ with open('HMall.txt', "r") as source:
 		heading = heading_and_lines[0]
 		lines = heading_and_lines[1:]
 		print heading
-		print lines 
+	#	print lines 
