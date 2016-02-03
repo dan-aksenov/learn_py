@@ -1,9 +1,9 @@
 import re
-import string
+#not working
 
-test={"nmb":0,"ttl":'null',"mtd":'null',"mst":'null'}
 #print "number			method			master"
 with open('HMall.txt', "r") as source:
+	test={"nmb":0,"ttl":'null',"mtd":'null',"mst":'null'}
 	for line in source:
 		if re.match("(.*)(Test #)(.*)", line):
 			tnum = re.findall("[0-9]+",line)
@@ -18,9 +18,9 @@ with open('HMall.txt', "r") as source:
 			tmeth = re.findall("=.*",line)
 			test["mtd"]=str(tmeth)[3:].split("'",1)[0]
 			#print tmeth
-		if re.match("MasterTest-Alive =.*",line):
+		if re.match("MasterTest-Alive =",line):
 			tmast = re.findall("=.*",line)
 			test["mst"]=str(tmast)[3:].split("'",1)[0]
 			#print tmast
-			print test.get("nmb")+ test.get("ttl") + test.get("mtd") + test.get("mst")
+			print test.get("nmb")+';'+ test.get("ttl")+';' + test.get("mtd")+';' + test.get("mst")
 			
