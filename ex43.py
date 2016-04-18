@@ -45,6 +45,9 @@ class CentralCorridor(Scene):
         print "put in in the bridge, and blow the ship up after getting into an "
         print "escape pod."
         print "\n"
+		print "You're running down the central corridor to the Weapoons Armory when"
+		print "a Gothon jumps out, red scaly skin, dark grimy teeth, and evil clown costume"
+		print
 class TheBridge(Scene):
 
     def enter(self):
