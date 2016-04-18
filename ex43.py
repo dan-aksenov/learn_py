@@ -47,7 +47,11 @@ class CentralCorridor(Scene):
         print "\n"
 		print "You're running down the central corridor to the Weapoons Armory when"
 		print "a Gothon jumps out, red scaly skin, dark grimy teeth, and evil clown costume"
-		print
+		print "flowing around his hate filled body. He's blocking the door to the"
+                print "Armory and about to pull a weapoon to blast you."
+
+        action = raw_input("> ")
+
 class TheBridge(Scene):
 
     def enter(self):
