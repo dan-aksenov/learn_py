@@ -51,7 +51,16 @@ class CentralCorridor(Scene):
                 print "Armory and about to pull a weapoon to blast you."
 
         action = raw_input("> ")
-
+        if action == "shoot!":
+            print "Quick on the draw you yank out your blaster and fire in at the Gothon."
+            print "His clown costume is flowing and moving around his body, which throws"
+            print "Your aim. You laser hits his costume but misses him entirely. This"
+            print "completely ruins his brand new costure his mother bought him, which"
+            print "makes him fly into an insane rage and blast you repeatedly in the face until"
+            print "you are dead. Then he eats you."
+            return 'death'
+        elif action = "dodge!":
+            print 
 class TheBridge(Scene):
 
     def enter(self):
