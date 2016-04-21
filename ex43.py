@@ -45,10 +45,10 @@ class CentralCorridor(Scene):
         print "put in in the bridge, and blow the ship up after getting into an "
         print "escape pod."
         print "\n"
-		print "You're running down the central corridor to the Weapoons Armory when"
-		print "a Gothon jumps out, red scaly skin, dark grimy teeth, and evil clown costume"
-		print "flowing around his hate filled body. He's blocking the door to the"
-                print "Armory and about to pull a weapoon to blast you."
+        print "You're running down the central corridor to the Weapoons Armory when"
+	print "a Gothon jumps out, red scaly skin, dark grimy teeth, and evil clown costume"
+	print "flowing around his hate filled body. He's blocking the door to the"
+        print "Armory and about to pull a weapoon to blast you."
 
         action = raw_input("> ")
         if action == "shoot!":
@@ -59,8 +59,28 @@ class CentralCorridor(Scene):
             print "makes him fly into an insane rage and blast you repeatedly in the face until"
             print "you are dead. Then he eats you."
             return 'death'
-        elif action = "dodge!":
-            print 
+
+        elif action == "dodge!":
+            print "Like a world class boxer, you dodge, weave, slip and slide right"
+            print "as the Gothon's blaster cranks a laser past your head."
+            print "In the middle of your artful dodge your foot slips and you"
+            print "bang your head on the metal wall and pass out."
+            print "You wake up shortly after only to die as the Gothon stomps on"
+            print "your head and eats you."
+            return 'death'
+
+        elif action == "tell a joke":
+            print "Lucky for you they made you learn Gothon insults in the academy."
+            print "You tell the one Gothon joke you know:"
+            print "Lbhe zbgure vf fb sng, jura fur fvgt nebhag gur ubhfr, fur fvgf ne bhaq fur ubhfr."
+            print "The Gothon stomps, tries not to laugh, then bursts out laughing and can't move."
+            print "While he's laughing you run up adn shoot him square in the head"
+            print "putting him down, then jump through the Weapon Armory door."
+            return 'laser_weapon_armory'
+
+        else:
+            print "DOES NOT COMPUTE!"
+            return 'central_corridor'       
 class TheBridge(Scene):
 
     def enter(self):
