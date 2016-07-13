@@ -96,11 +96,11 @@ class LaserWeaponArmory(Scene):
         guesses = 0    
         
         while guess != code and guesses < 10:
-            print = "BZZZEDDD!"
+            print "BZZZEDDD!"
             guesses += 1
             guess = raw_input("[keypad]> ")
 
-        if guss == code:
+        if guess == code:
             print "The container clicks open and the seal breaks, letting gas out."
             print "You grab the neutron bomb and run as fast as you can to the"
             print "bridge where you must place it in the right spot."
@@ -111,10 +111,6 @@ class LaserWeaponArmory(Scene):
             print "You decide to sit there, and finally the Gothons blow up the"
             print "ship from their ship and you die."
             return 'death'                  
-
-
-
-class TheBridge(Scene):
 
 class TheBridge(Scene):
 
@@ -190,16 +186,25 @@ class Finished(Scene):
         return 'finished'
 
 class Map(object):
-
+    
+    scenes = {
+        'central_corridor': CentralCorridor(),
+        'laser_weapon_armory': LaserWeaponArmory(),
+        'the_bridge': TheBridge(),
+        'escape_pod': EscapePod(),
+        'death': Death(),
+        'finished': Finished(),
+    }            
 
     def __init__(self, start_scene):
-        pass
+        self.start_scene = start_scene
 
     def next_scene(self, scene_name):
-        pass
+        val = Map.scenes.get(scene_name)
+        return val
 
     def opening_scene(self):
-        pass
+        return self.next_scene(self.start_scene)
 
 a_map = Map('central_corridor')
 a_game = Engine(a_map)
