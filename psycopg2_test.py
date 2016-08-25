@@ -1,4 +1,4 @@
-#!/usr/bin/python2.4
+#!/usr/bin/python
 #
 # Small script to show PostgreSQL and Pyscopg together
 #
