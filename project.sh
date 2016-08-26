@@ -1,4 +1,5 @@
 #!/bin/bash
+if [ -z "$1" ]; then echo "var is unset" && exit 1; fi
 mkdir $1
 cd $1
 mkdir bin $1 tests docs
