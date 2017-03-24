@@ -8,12 +8,12 @@ import Tkinter
 import psycopg2
 
 try:
-    conn = psycopg2.connect("dbname='postgres' user='postgres'")
+    conn = psycopg2.connect("dbname='postgres' user='postgres' host='localhost'")
 except:
     print "I am unable to connect to the database"
 
 cur = conn.cursor()
-cur.execute("""select c1,c2 from test1 limit 10""")
+cur.execute("""select c1 from test1 limit 10""")
 rows = cur.fetchall()
 top = Tkinter.Tk()
 
