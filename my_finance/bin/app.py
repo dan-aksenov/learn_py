@@ -9,12 +9,12 @@ urls = (
 app = web.application(urls, globals())
 
 try:
-    conn = psycopg2.connect("dbname='my_finance' user='dbax' host='192.168.155.156' password='210482'")
+    conn = psycopg2.connect("dbname='fin_db' user='pi'") 
 except:
     print "Unable to connect to the database"
 
 cur = conn.cursor()
-cur.execute("""select account,round(sum(summ)) s from my_finance_tbls.my_transactions group by account order by s desc""")
+cur.execute("""select account,round(sum(summ)) s from fin_tbls.transactions group by account order by s desc""")
 rows = cur.fetchall()
 
 #pie_chart = pygal.Pie()
