@@ -13,6 +13,6 @@ print(len(a_time))
 # write to sqlfile
 f = open('results_repeat.sql', 'w')
 for a in (a_time):
-   sql = 'insert into results("script_type", "time") values ("script2", ' + str(a) + ');'
+   sql = 'insert into results("script_type", "time") values (\'script_multiple\', ' + str(a) + ');'
    f.write(sql + "\n")
 f.close()

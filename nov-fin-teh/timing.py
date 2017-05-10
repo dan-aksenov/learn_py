@@ -16,6 +16,6 @@ print(numpy.sum(a_times))
 
 f = open('results_timing.sql', 'w')
 for t in (a_times):
-   sql = 'insert into results("script_type", "time") values ("script1", ' + str(t) + ');'
+   sql = 'insert into results("script_type", "time") values (\'script_timing\', ' + str(t) + ');'
    f.write(sql + "\n")
 f.close()
