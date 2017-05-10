@@ -1,17 +1,21 @@
 import time, numpy, timeit, sys
 from test import MyHTMLParser
-arr = []
+
+a_times = []
 start = time.time()
-run_time = float(sys.argv[1])
+p_time = float(sys.argv[1])
+
 while True :
-    t=timeit.timeit('MyHTMLParser("http://python.org")', setup='from test import MyHTMLParser', number=1)
-    arr.append(t)
-    if time.time() > start + run_time : break
-print(len(arr))
-print(numpy.average(arr))
-print(numpy.sum(arr))
-f = open('results.sql', 'w')
-for a in (arr):
-   sql = 'insert into results("script_type", "time") values ("script1", ' + str(a) + ');'
+    v_time=timeit.timeit('MyHTMLParser("http://python.org")', setup='from test import MyHTMLParser', number=1)
+    a_times.append(p_time)
+    if time.time() > start + p_time : break
+
+print(len(a_times))
+print(numpy.average(a_times))
+print(numpy.sum(a_times))
+
+f = open('results_timing.sql', 'w')
+for t in (a_times):
+   sql = 'insert into results("script_type", "time") values ("script1", ' + str(t) + ');'
    f.write(sql + "\n")
 f.close()
