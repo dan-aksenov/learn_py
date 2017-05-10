@@ -7,7 +7,7 @@ p_time = float(sys.argv[1])
 
 while True :
     v_time=timeit.timeit('MyHTMLParser("http://python.org")', setup='from test import MyHTMLParser', number=1)
-    a_times.append(p_time)
+    a_times.append(v_time)
     if time.time() > start + p_time : break
 
 print(len(a_times))
