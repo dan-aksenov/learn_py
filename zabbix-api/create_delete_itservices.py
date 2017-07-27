@@ -1,8 +1,11 @@
+# This script template used to automatically create child services based on host triggers.
+
+# Import api and connect to zabbix.
 from zabbix_api import ZabbixAPI
 zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix321")
 zapi.login("Admin", "zabbix")
 
-# Set agent/host name. Also used as ITService name. Any way to do in dynamically or from file.
+# Set parent it-service name. In this setup its the same as agent's/host name.
 a_zabbix_agents = ['pts-tst-zab.fors.ru',
 'pts-tst-as1.fors.ru',
 'pts-tst-as2.fors.ru',
@@ -16,8 +19,8 @@ a_zabbix_agents = ['pts-tst-zab.fors.ru',
 'pts-dev-as1.fors.ru'
 ]
 
-# Create block.
-# convert to function   	
+# Create service block.
+# todo: convert to function   	
 for i in range(0, len(a_zabbix_agents)):
    # Get triggers for given agent.
    v_host_triggs = zapi.trigger.get({"filter":{"host": a_zabbix_agents[i]}})
@@ -31,9 +34,7 @@ for i in range(0, len(a_zabbix_agents)):
        zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
 
 # Delete block.
-a_zabbix_agents = ['skpdi.fors.ru']
-
-# convert to function
+# todo: convert to function
 for i in range(0, len(a_zabbix_agents)):
    # Get serviceid.
    v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
