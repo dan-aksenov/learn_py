@@ -40,4 +40,7 @@ for i in range(0, len(a_zabbix_agents)):
    # Get his children.
    v_children =  zapi.service.get({"parentids": v_parent_id})
    for i in range(0, len(v_children)):
-      zapi.service.delete({v_children[i]["serviceid"]})
+       # Get child id.
+       v_child_id = v_children[i]["serviceid"]
+       # Array mast be used to service.delete.
+       zapi.service.delete([v_child_id])
