@@ -31,9 +31,9 @@ for i in range(0, len(a_zabbix_agents)):
        zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
 
 # Delete block.
-# convert to function
 a_zabbix_agents = ['skpdi.fors.ru']
 
+# convert to function
 for i in range(0, len(a_zabbix_agents)):
    # Get serviceid.
    v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
