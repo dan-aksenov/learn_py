@@ -32,12 +32,12 @@ for i in range(0, len(a_zabbix_agents)):
 
 # Delete block.
 # convert to function
+a_zabbix_agents = ['skpdi.fors.ru']
+
 for i in range(0, len(a_zabbix_agents)):
-   # Get triggers for given agent.
-   v_host_triggs = zapi.trigger.get({"filter":{"host": a_zabbix_agents[i]}})
-   # Get parent serviceid.
+   # Get serviceid.
    v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
-   # Create service based on trigger for selected host to be run in loop.
-   for i in range(0, len(v_host_triggs)):
-       v_zabbix_service = zapi.service.get({"parentids": v_parent_id}})[0]['serviceid']
-       zapi.service.delete({v_zabbix_service[0]["serviceid"]})
+   # Get his children.
+   v_children =  zapi.service.get({"parentids": v_parent_id})
+   for i in range(0, len(v_children)):
+      zapi.service.delete({v_children[i]["serviceid"]})
