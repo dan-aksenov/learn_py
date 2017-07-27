@@ -15,7 +15,9 @@ a_zabbix_agents = ['pts-tst-zab.fors.ru',
 'pts-dev-as2.fors.ru',
 'pts-dev-as1.fors.ru'
 ]
-   	
+
+# Create block.
+# convert to function   	
 for i in range(0, len(a_zabbix_agents)):
    # Get triggers for given agent.
    v_host_triggs = zapi.trigger.get({"filter":{"host": a_zabbix_agents[i]}})
@@ -28,7 +30,8 @@ for i in range(0, len(a_zabbix_agents)):
        # Update parents dependencies. Get service id from preivous command result.
        zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
 
-# rest code isnt working. need to get correct parent/hostname.
+# Delete block.
+# convert to function
 for i in range(0, len(a_zabbix_agents)):
    # Get triggers for given agent.
    v_host_triggs = zapi.trigger.get({"filter":{"host": a_zabbix_agents[i]}})
@@ -36,9 +39,5 @@ for i in range(0, len(a_zabbix_agents)):
    v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
    # Create service based on trigger for selected host to be run in loop.
    for i in range(0, len(v_host_triggs)):
-       # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
-       v_zabbix_service = zapi.service.get({"name": v_host_triggs[i]['description'],"triggerid": v_host_triggs[i]['triggerid']})[i]["name"]
-       print v_zabbix_service
+       v_zabbix_service = zapi.service.get({"parentids": v_parent_id}})[0]['serviceid']
        zapi.service.delete({v_zabbix_service[0]["serviceid"]})
-       # Update parents dependencies. Get service id from preivous command result.
-       #zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
