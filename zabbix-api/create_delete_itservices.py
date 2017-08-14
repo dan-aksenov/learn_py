@@ -19,7 +19,18 @@ a_zabbix_agents = ['pts-tst-zab.fors.ru',
 'pts-dev-as1.fors.ru'
 ]
 
+v_master_service = 'ODS_PROD'
+
 # Create service block.
+# Create parent services, based on host/agent names. And make it child of master service.
+for i in range(0, len(a_zabbix_agents)):
+   # Get master service id
+   v_parent_id = zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
+   # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
+   v_service_create_result = zapi.service.create({"name": a_zabbix_agents[i],"algorithm": 1,"showsla": 1,"goodsla": 99.99,"sortorder": 1,"triggerid": v_host_triggs[i]['triggerid']})
+   # Update parents dependencies. Get service id from preivous command result.
+   zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
+
 # todo: convert to function   	
 for i in range(0, len(a_zabbix_agents)):
    # Get triggers for given agent.
