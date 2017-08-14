@@ -47,6 +47,7 @@ for i in range(0, len(a_zabbix_agents)):
 
 # Delete block.
 # todo: convert to function
+# Delete trigger-services.
 for i in range(0, len(a_zabbix_agents)):
    # Get serviceid.
    v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
@@ -57,3 +58,9 @@ for i in range(0, len(a_zabbix_agents)):
        v_child_id = v_children[i]["serviceid"]
        # Array mast be used to service.delete.
        zapi.service.delete([v_child_id])
+
+# Delete host-services.
+for i in range(0, len(a_zabbix_agents)):
+   # Get serviceid.
+   v_service_id =  zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
+   zapi.service.delete([v_service_id])
