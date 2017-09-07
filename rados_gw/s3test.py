@@ -6,6 +6,7 @@ import boto.s3.connection
 from boto.s3.key import Key
 
 # Connect.
+# Got from http://docs.ceph.com/docs/master/install/install-ceph-gateway
 access_key = '434A2UHTCPKYJOTUFFOL'
 secret_key = 'QZfwhMffQ7knQ7xwKUlvAx4b3wapKCZkgnHxpLpE'
 conn = boto.connect_s3(
@@ -24,6 +25,7 @@ for bucket in conn.get_all_buckets():
     )
 
 # Insert file to bucket.
+# Got from https://stackoverflow.com/questions/15085864/how-to-upload-a-file-to-directory-in-s3-bucket-using-boto
 testfile = "test.file"
 print 'Uploading %s to bucket %s' % \
    (testfile, bucket)
@@ -38,6 +40,7 @@ k.set_contents_from_filename(testfile,
     cb=percent_cb, num_cb=10)
 
 # View bucket contents.	
+# Got from http://docs.ceph.com/docs/master/radosgw/s3/python/
 for key in bucket.list():
         print "{name}\t{size}\t{modified}".format(
                 name = key.name,
