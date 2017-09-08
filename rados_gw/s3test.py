@@ -24,6 +24,7 @@ def buck_add( buck_name ):
     return buck;
 
 def buck_list():
+   print "Available buckets are:"
    for bucket in conn.get_all_buckets():
        print "{name} {created}".format(
            name=bucket.name,
