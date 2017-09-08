@@ -5,6 +5,9 @@ import sys
 import boto.s3.connection
 from boto.s3.key import Key
 
+print('Enter s3 gateway name:')
+s3gw = input()
+
 # Connect.
 # Got from http://docs.ceph.com/docs/master/install/install-ceph-gateway
 access_key = '434A2UHTCPKYJOTUFFOL'
@@ -12,20 +15,25 @@ secret_key = 'QZfwhMffQ7knQ7xwKUlvAx4b3wapKCZkgnHxpLpE'
 conn = boto.connect_s3(
         aws_access_key_id=access_key,
         aws_secret_access_key=secret_key,
-        host='rados-gw.my.ru', port=7480,
+        host=s3gw, port=7480,
         is_secure=False, calling_format=boto.s3.connection.OrdinaryCallingFormat(),
        )
 
 # Create bucket.
-bucket = conn.create_bucket('my-new-bucket')
-for bucket in conn.get_all_buckets():
-    print "{name} {created}".format(
-        name=bucket.name,
-        created=bucket.creation_date,
-    )
+def buck_add( buck_name ):
+    buck = conn.create_bucket( buck_name )
+    return buck;
+
+def buck_list():
+   for bucket in conn.get_all_buckets():
+       print "{name} {created}".format(
+           name=bucket.name,
+           created=bucket.creation_date,
+       )
 
 # Insert file to bucket.
 # Got from https://stackoverflow.com/questions/15085864/how-to-upload-a-file-to-directory-in-s3-bucket-using-boto
+'''
 testfile = "test.file"
 print 'Uploading %s to bucket %s' % \
    (testfile, bucket)
@@ -38,15 +46,18 @@ k = Key(bucket)
 k.key = 'my test file'
 k.set_contents_from_filename(testfile,
     cb=percent_cb, num_cb=10)
+'''
 
 # View bucket contents.	
 # Got from http://docs.ceph.com/docs/master/radosgw/s3/python/
-for key in bucket.list():
+def buck_cont( buck_name ):
+    buck = conn.create_bucket( buck_name )
+    for key in buck.list():
         print "{name}\t{size}\t{modified}".format(
-                name = key.name,
-                size = key.size,
-                modified = key.last_modified,
-                )
+            name = key.name,
+            size = key.size,
+            modified = key.last_modified,
+        )
 
 # Access rights.
 # Got from http://boto.cloudhackers.com/en/latest/s3_tut.html
