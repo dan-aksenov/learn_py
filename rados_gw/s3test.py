@@ -47,3 +47,11 @@ for key in bucket.list():
                 size = key.size,
                 modified = key.last_modified,
                 )
+
+# Access rights.
+# Got from http://boto.cloudhackers.com/en/latest/s3_tut.html
+#bucket = conn.get_bucket('my-new-container')
+#acl = bucket.get_acl()
+#acl
+#bucket.set_acl('public-read')
+#bucket.set_acl('public-read','hello.txt')
