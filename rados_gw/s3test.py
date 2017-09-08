@@ -60,8 +60,12 @@ def buck_cont( buck_name ):
 
 # Access rights.
 # Got from http://boto.cloudhackers.com/en/latest/s3_tut.html
-#bucket = conn.get_bucket('my-new-container')
-#acl = bucket.get_acl()
-#acl
-#bucket.set_acl('public-read')
-#bucket.set_acl('public-read','hello.txt')
+'''
+bucket = conn.get_bucket('my-new-container')
+acl = bucket.get_acl()
+acl
+bucket.set_acl('public-read')
+bucket.set_acl('public-read','hello.txt')
+'''
+# Getn bucket list to start with...
+buck_list()
