@@ -5,8 +5,7 @@ import sys
 import boto.s3.connection
 from boto.s3.key import Key
 
-print('Enter s3 gateway name:')
-s3gw = input()
+s3gw = raw_input("Enter s3 gateway name: ")
 
 # Connect.
 # Got from http://docs.ceph.com/docs/master/install/install-ceph-gateway
