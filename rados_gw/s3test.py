@@ -43,7 +43,7 @@ def percent_cb(complete, total):
     sys.stdout.flush()
 
 k = Key(bucket)
-k.key = 'my test file'
+k.key = 'my_test_file.txt'
 k.set_contents_from_filename(testfile,
     cb=percent_cb, num_cb=10)
 '''
