@@ -14,7 +14,7 @@ secret_key = 'QZfwhMffQ7knQ7xwKUlvAx4b3wapKCZkgnHxpLpE'
 conn = boto.connect_s3(
         aws_access_key_id=access_key,
         aws_secret_access_key=secret_key,
-        host=s3gw, port=7480,
+        host=s3gw, port=7480,                                                      	
         is_secure=False, calling_format=boto.s3.connection.OrdinaryCallingFormat(),
        )
 
@@ -33,20 +33,22 @@ def buck_list():
 
 # Insert file to bucket.
 # Got from https://stackoverflow.com/questions/15085864/how-to-upload-a-file-to-directory-in-s3-bucket-using-boto
-'''
-testfile = "test.file"
-print 'Uploading %s to bucket %s' % \
-   (testfile, bucket)
 
-def percent_cb(complete, total):
-    sys.stdout.write('.')
-    sys.stdout.flush()
+def put_file( buck_name, fine_name ):
+   #change it to get bucket
+   buck = buck = conn.create_bucket( buck_name )
+   print 'Uploading %s to bucket %s' % \
+   (file_name, buck)
 
-k = Key(bucket)
-k.key = 'my_test_file.txt'
-k.set_contents_from_filename(testfile,
-    cb=percent_cb, num_cb=10)
-'''
+   def percent_cb(complete, total):
+      sys.stdout.write('.')
+      sys.stdout.flush()
+
+   k = Key(buck)
+   k.key = 'my_test_file.txt'
+   k.set_contents_from_filename(testfile,
+      cb=percent_cb, num_cb=10)
+
 
 # View bucket contents.	
 # Got from http://docs.ceph.com/docs/master/radosgw/s3/python/
@@ -66,7 +68,7 @@ bucket = conn.get_bucket('my-new-container')
 acl = bucket.get_acl()
 acl
 bucket.set_acl('public-read')
-bucket.set_acl('public-read','hello.txt')
+bucket.set	_acl('public-read','hello.txt')
 '''
 # Getn bucket list to start with...
 buck_list()
