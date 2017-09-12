@@ -1,29 +1,28 @@
-# Simple python script to connect to radosgw(ceph in my setup). Create bucket and insert some dummy data to in.
+'''
+S3 Testing module.
+Simple python script to connect to radosgw(ceph in my setup). Create bucket and insert some dummy data to in.
+'''
 import boto
 import boto.s3
 import sys
 import boto.s3.connection
 from boto.s3.key import Key
 
-s3gw = raw_input("Enter s3 gateway name: ")
-
-# Connect.
 # Got from http://docs.ceph.com/docs/master/install/install-ceph-gateway
-access_key = '434A2UHTCPKYJOTUFFOL'
-secret_key = 'QZfwhMffQ7knQ7xwKUlvAx4b3wapKCZkgnHxpLpE'
-conn = boto.connect_s3(
-        aws_access_key_id=access_key,
-        aws_secret_access_key=secret_key,
-        host=s3gw, port=7480,                                                      	
-        is_secure=False, calling_format=boto.s3.connection.OrdinaryCallingFormat(),
-       )
-
-# Create bucket.
-def buck_add( buck_name ):
-    buck = conn.create_bucket( buck_name )
-    return buck;
+def s3connect():
+   "Connect to given s3 gateway."
+   s3gw = raw_input("Enter s3 gateway name: ")
+   access_key = '434A2UHTCPKYJOTUFFOL'
+   secret_key = 'QZfwhMffQ7knQ7xwKUlvAx4b3wapKCZkgnHxpLpE'
+   conn = boto.connect_s3(
+      aws_access_key_id=access_key,
+      aws_secret_access_key=secret_key,
+      host=s3gw, port=7480,                                                      	
+      is_secure=False, calling_format=boto.s3.connection.OrdinaryCallingFormat(),
+      )
 
 def buck_list():
+   "Get avaliable buckets."
    print "Available buckets are:"
    for bucket in conn.get_all_buckets():
        print "{name} {created}".format(
@@ -31,11 +30,14 @@ def buck_list():
            created=bucket.creation_date,
        )
 
-# Insert file to bucket.
-# Got from https://stackoverflow.com/questions/15085864/how-to-upload-a-file-to-directory-in-s3-bucket-using-boto
+def buck_add( buck_name ):
+    "Create bucket"
+    buck = conn.create_bucket( buck_name )
+    return buck;
 
+# Got from https://stackoverflow.com/questions/15085864/how-to-upload-a-file-to-directory-in-s3-bucket-using-boto
 def put_file( buck_name, file_name ):
-   #change it to get bucket
+   "Insert file to bucket. Create bucket if not exists."
    buck = buck = conn.create_bucket( buck_name )
    print 'Uploading %s to bucket %s' % \
    (file_name, buck)
@@ -49,10 +51,9 @@ def put_file( buck_name, file_name ):
    k.set_contents_from_filename(file_name,
       cb=percent_cb, num_cb=10)
 
-
-# View bucket contents.	
 # Got from http://docs.ceph.com/docs/master/radosgw/s3/python/
 def buck_cont( buck_name ):
+    "View bucket contents. Create bucket if not exists."
     buck = conn.create_bucket( buck_name )
     for key in buck.list():
         print "{name}\t{size}\t{modified}".format(
@@ -70,5 +71,3 @@ acl
 bucket.set_acl('public-read')
 bucket.set	_acl('public-read','hello.txt')
 '''
-# Getn bucket list to start with...
-buck_list()
