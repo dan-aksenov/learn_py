@@ -6,14 +6,19 @@ import boto
 import boto.s3
 import sys
 import boto.s3.connection
+import json
 from boto.s3.key import Key
 
 # Got from http://docs.ceph.com/docs/master/install/install-ceph-gateway
-def s3connect( s3gw ):
+def s3connect():
    "Connect to given s3 gateway."
-   #s3gw = raw_input("Enter s3 gateway name: ")
-   access_key = '434A2UHTCPKYJOTUFFOL'
-   secret_key = 'QZfwhMffQ7knQ7xwKUlvAx4b3wapKCZkgnHxpLpE'
+   # Read gateway name and access keys from json conf file. do this with try, except.
+   with open('s3conf.json') as config_file:    
+      conn_data = json.load(config_file)
+   
+   s3gw = conn_data['gateway']   
+   access_key = conn_data['access_key']
+   secret_key = conn_data['secret_key']
    global conn
    conn = boto.connect_s3(
       aws_access_key_id=access_key,
