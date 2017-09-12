@@ -34,7 +34,7 @@ def buck_list():
 # Insert file to bucket.
 # Got from https://stackoverflow.com/questions/15085864/how-to-upload-a-file-to-directory-in-s3-bucket-using-boto
 
-def put_file( buck_name, fine_name ):
+def put_file( buck_name, file_name ):
    #change it to get bucket
    buck = buck = conn.create_bucket( buck_name )
    print 'Uploading %s to bucket %s' % \
@@ -46,7 +46,7 @@ def put_file( buck_name, fine_name ):
 
    k = Key(buck)
    k.key = 'my_test_file.txt'
-   k.set_contents_from_filename(testfile,
+   k.set_contents_from_filename(file_name,
       cb=percent_cb, num_cb=10)
 
 
