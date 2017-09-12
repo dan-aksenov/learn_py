@@ -6,7 +6,7 @@ zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix321")
 zapi.login("Admin", "zabbix")
 
 # Set parent it-service name. In this setup its the same as agent's/host name.
-	
+a_zabbix_agents =[	
 'pts-tst-as1.fors.ru',
 'pts-tst-as2.fors.ru',
 'pts-tst-db1c.fors.ru',
