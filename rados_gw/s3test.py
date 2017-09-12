@@ -9,17 +9,19 @@ import boto.s3.connection
 from boto.s3.key import Key
 
 # Got from http://docs.ceph.com/docs/master/install/install-ceph-gateway
-def s3connect():
+def s3connect( s3gw ):
    "Connect to given s3 gateway."
-   s3gw = raw_input("Enter s3 gateway name: ")
+   #s3gw = raw_input("Enter s3 gateway name: ")
    access_key = '434A2UHTCPKYJOTUFFOL'
    secret_key = 'QZfwhMffQ7knQ7xwKUlvAx4b3wapKCZkgnHxpLpE'
+   global conn
    conn = boto.connect_s3(
       aws_access_key_id=access_key,
       aws_secret_access_key=secret_key,
       host=s3gw, port=7480,                                                      	
       is_secure=False, calling_format=boto.s3.connection.OrdinaryCallingFormat(),
       )
+   return conn; 
 
 def buck_list():
    "Get avaliable buckets."
