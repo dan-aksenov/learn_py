@@ -6,6 +6,13 @@ Originally made to relink postgresql tablespaces after restore.
 '''
 
 '''
+Path to directory containing tablespace links.
+Presumed to be like $PG_DATA/pg_tblspc/
+Last slash "/" required!
+'''
+links_location = "/usr/local/pgsql/basebackup/db-09-22-2017_09/pg_tblspc/"
+
+'''
 Path part to be changed. IE if we are replacing 
 /usr/local/pgsql/tablespace/fdc_ods_big_ind
 with
@@ -18,13 +25,6 @@ final_part like
 '''
 orig_part = '/usr/local/pgsql/tablespace'
 final_part = '/usr/local/pgsql/basebackup/tablespace'
-
-'''
-Path to directory containing tablespace links.
-Presumed to be like $PG_DATA/pg_tblspc/
-Last slash "/" required!
-'''
-links_location = "/usr/local/pgsql/basebackup/db-09-22-2017_09/pg_tblspc/"
 
 # Get link names.
 links = os.listdir( links_location )
