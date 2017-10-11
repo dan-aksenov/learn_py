@@ -1,5 +1,9 @@
 import os, sys
 
+'''
+Change file's extension.
+'''
+
 work_dir = sys.argv[1]
 old_ext = sys.argv[2]
 new_ext = sys.argv[3]

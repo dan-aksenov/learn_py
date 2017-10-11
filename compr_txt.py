@@ -1,6 +1,10 @@
 import os
 from time import strftime
 
+'''
+Arvhive and compress.
+'''
+
 logsdir = "/home/dbax/learn_py"
 zip_program = "tar -zcvf"
 
