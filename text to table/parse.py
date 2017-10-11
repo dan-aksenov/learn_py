@@ -51,3 +51,5 @@ for line in f:
            print prop_list
     elif obj_end_match:
         in_obj = False
+
+close(test_file)
