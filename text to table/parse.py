@@ -14,8 +14,10 @@ with open(test_file) as f:
    for line in f:
        obj_start_match = obj_start.match(line)
        if obj_start_match:
+          cur_obj = obj_start_match.groups()[0]v
           obj_name = ("{}".format(obj_start_match.group(0)))
           print obj_name
+       if in_obj:
           prop_match = prop.match(line)
        if prop_match:
           prop_name = ("{}".format(prop_match.group(0)))
