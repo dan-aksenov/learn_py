@@ -13,6 +13,13 @@ into
 [ Object 1]
 [ Property 1 ],[ Property 2 ]
 
+right now does a bit wrong:
+[ Object 1 ]
+['[ Property 1 ]']
+['[ Property 1 ]', '[ Property 2 ]']
+
+last array state only.
+
 '''
 
 #
