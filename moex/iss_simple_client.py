@@ -15,7 +15,7 @@ import json
 
 
 requests = {'history_secs': 'http://iss.moex.com/iss/history/engines/%(engine)s/markets/%(market)s/boards/%(board)s/securities.json?date=%(date)s'}
-
+#{'history_secs': 'http://iss.moex.com/iss/history/engines/iss/history/engines/%(engine)s/markets/%(market)s/securities.json?date=%(date)s'}
 
 class Config:
     def __init__(self, user='', password='', proxy_url='', debug_level=0):
