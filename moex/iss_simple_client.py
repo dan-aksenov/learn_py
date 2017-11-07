@@ -26,9 +26,9 @@ class Config:
             debug_level: 0 - no output, 1 - send debug info to stdout
         """
         self.debug_level = debug_level  
-        self.proxy_url = ''
-        self.user = ''
-        self.password = ''
+        self.proxy_url = proxy_url
+        self.user = user
+        self.password = password
         self.auth_url = "https://passport.moex.com/authenticate"
 
 
