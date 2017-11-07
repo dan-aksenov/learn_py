@@ -48,7 +48,7 @@ class MyDataHandler(MicexISSDataHandler):
 
 
 def main():
-    my_config = Config(user='username', password='password', proxy_url='')
+    my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
     if my_auth.is_real_time():
         iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
