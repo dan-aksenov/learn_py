@@ -42,7 +42,8 @@ for i in range(0, len(a_zabbix_agents)):
    # Create service based on trigger for selected host to be run in loop.
    for i in range(0, len(v_host_triggs)):
        # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
-       v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"sortorder": 1,"showsla": 1,"goodsla": 99.99,"triggerid": v_host_triggs[i]['triggerid']})
+       v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"sortorder": 1,"triggerid": v_host_triggs[i]['triggerid']})
+      #v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"sortorder": 1,"showsla": 1,"goodsla": 99.99,"triggerid": v_host_triggs[i]['triggerid']})
        # Update parents dependencies. Get service id from preivous command result.
        zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
 
