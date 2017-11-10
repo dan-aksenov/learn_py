@@ -46,6 +46,6 @@ if __name__ == "__main__":
         print "You must specify a valid file to parse"
         print __doc__
         sys.exit(1)
-   log_report = generate_log_report(infile)
-   print log_report
-   infile.close()
+    log_report = generate_log_report(infile)
+    print log_report
+    infile.close()
