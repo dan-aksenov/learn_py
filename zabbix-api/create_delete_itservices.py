@@ -1,4 +1,7 @@
-# This script template used to automatically create child services based on host triggers.
+# -*- coding: utf-8 -*-
+# Для чтения русских комментов.
+
+''' Автоматическое создание услуг Zabbix на основе узлов сети и их триггеров '''
 
 # Import api and connect to zabbix.
 from zabbix_api import ZabbixAPI
@@ -7,7 +10,7 @@ zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix321")
 zapi.login("Admin", "zabbix")
 
 # Set parent it-service name. In this setup its the same as agent's/host name.
-a_zabbix_agents = [	
+a_zabbix_agents = [    
 'pts-tst-as1.fors.ru',
 'pts-tst-as2.fors.ru',
 'pts-tst-db1c.fors.ru',
@@ -27,6 +30,7 @@ v_master_service = raw_input("Master service: ")
 # Create service block.
 # Create parent services, based on host/agent names. Make them child of master service.
 def cre_host_srv():
+    ''' Создание услуг на основе имен узлов сети, объявленных в массиве a_zabbix_agents '''
     for i in range(0, len(a_zabbix_agents)):
         # Get master service id.
         v_parent_id = zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
@@ -36,8 +40,9 @@ def cre_host_srv():
         zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
 
 # Create trigger based services. Make them children of agetn/host services.
-# todo: convert to function   	
+# todo: convert to function       
 def cre_trig_sev():
+    ''' Для каждой услуги-узла создание потомков на основе триггеров '''
     for i in range(0, len(a_zabbix_agents)):
         # Get triggers for given agent.
         v_host_triggs = zapi.trigger.get({"filter":{"host": a_zabbix_agents[i]}})
@@ -55,6 +60,7 @@ def cre_trig_sev():
 # todo: convert to function
 # Delete trigger-services.
 def del_trig_srv():
+    ''' Удаление услуг на основе триггеров'''
     for i in range(0, len(a_zabbix_agents)):
         # Get serviceid.
         v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
@@ -68,6 +74,7 @@ def del_trig_srv():
 
 # Delete host-services.
 def del_host_srv():
+    ''' Удаление услуг на основе узлов сети '''
     for i in range(0, len(a_zabbix_agents)):
         # Get serviceid.
         v_service_id =  zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
