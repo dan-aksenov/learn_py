@@ -33,7 +33,7 @@ def generate_log_report(logfile):
             ##totally disregard anything we don't understand
             continue
     report_dict.setdefault(line_dict['remote_host'], []).append(bytes_sent)
-return report_dict
+    return report_dict
 
 if __name__ == "__main__":
     if not len(sys.argv) > 1:
