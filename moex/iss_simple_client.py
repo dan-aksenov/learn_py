@@ -143,7 +143,7 @@ class MicexISSClient:
             # it's also possible to use the iss.json=extended argument instead
             # to get all the IDs together with data (leads to more traffic)
             iss.json = extended
-			#jcols = jhist['columns']
+            #jcols = jhist['columns']
             #secIdx = jcols.index('SECID')
             #closeIdx = jcols.index('CLOSE')
             #tradesIdx = jcols.index('VALUE')
