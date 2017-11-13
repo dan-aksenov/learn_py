@@ -142,15 +142,17 @@ class MicexISSClient:
             # node with the list of column IDs in 'data' in correct order;
             # it's also possible to use the iss.json=extended argument instead
             # to get all the IDs together with data (leads to more traffic)
-            iss.json = extended
-            #jcols = jhist['columns']
-            #secIdx = jcols.index('SECID')
-            #closeIdx = jcols.index('CLOSE')
-            #tradesIdx = jcols.index('VALUE')
+            #iss.json = extended
+            jcols = jhist['columns']
+            brdIdx = jcols.index('BOARDID')
+            secIdx = jcols.index('SECID')
+            closeIdx = jcols.index('CLOSE')
+            tradesIdx = jcols.index('VALUE')
 
             result = []
             for sec in jdata:
-                result.append((sec[secIdx],
+                result.append((sec[brdIdx],
+                               sec[secIdx],
                                del_null(sec[closeIdx]),
                                del_null(sec[tradesIdx])))
             # we return pieces of received data on each iteration

@@ -28,13 +28,14 @@ class MyData:
         self.history = []
 
     def print_history(self):
-        print "=" * 49
-        print "|%15s|%15s|%15s|" % ("SECID", "CLOSE", "VALUE")
-        print "=" * 49
+        #print "=" * 49
+        #print "|%15s|%15s|%15s|" % ("SECID", "CLOSE", "VALUE")
+        #print "=" * 49
         for sec in self.history:
             #print "|%15s|%15.2f|%15d|" % (sec[0], sec[1], sec[2])
-            print "insert into mytable values(" + str(sec[0]), str(sec[1]), str(sec[2]) + ");"
-        print "=" * 49
+            print sec
+			#print "insert into mytable values(" + str(sec[0]), str(sec[1]), str(sec[2]) + ");"
+        #print "=" * 49
 
 
 class MyDataHandler(MicexISSDataHandler):
