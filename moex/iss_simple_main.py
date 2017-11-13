@@ -57,7 +57,7 @@ def main():
     my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
     """ not getting now in work hours. test it in eventing! """
-    now = datetime.datetime.now() - datetime.timedelta(days=4)
+    now = datetime.datetime.now() -  datetime.timedelta(days=4)
     if my_auth.is_real_time():
         iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
         iss.get_history_securities('stock',
