@@ -13,6 +13,7 @@
 """
 
 import sys
+import datetime
 from iss_simple_client import Config
 from iss_simple_client import MicexAuth
 from iss_simple_client import MicexISSClient
@@ -34,7 +35,7 @@ class MyData:
         for sec in self.history:
             #print "|%15s|%15.2f|%15d|" % (sec[0], sec[1], sec[2])
             print sec
-			#print "insert into mytable values(" + str(sec[0]), str(sec[1]), str(sec[2]) + ");"
+            #print "insert into mytable values(" + str(sec[0]), str(sec[1]), str(sec[2]) + ");"
         #print "=" * 49
 
 
@@ -52,12 +53,14 @@ class MyDataHandler(MicexISSDataHandler):
 def main():
     my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
+    """ not getting now in work hours. test it in eventing! """
+    now = datetime.datetime.now() - datetime.timedelta(days=4)
     if my_auth.is_real_time():
         iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
         iss.get_history_securities('stock',
                                    'shares',
                                    'eqne',
-                                   '2017-11-10')
+                                   now.strftime("%Y-%m-%d"))
         iss.handler.data.print_history()
 
 if __name__ == '__main__':
