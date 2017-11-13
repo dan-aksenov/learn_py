@@ -32,9 +32,11 @@ class MyData:
         #print "=" * 49
         #print "|%15s|%15s|%15s|" % ("SECID", "CLOSE", "VALUE")
         #print "=" * 49
+        """ Temporary added search pattern for TQBR. look to parse it from json"""
         for sec in self.history:
-            #print "|%15s|%15.2f|%15d|" % (sec[0], sec[1], sec[2])
-            print sec
+        #    print "|%15s|%15.2f|%15d|" % (sec[0], sec[1], sec[2])
+            if 'TQBR' in sec:
+                print sec
             #print "insert into mytable values(" + str(sec[0]), str(sec[1]), str(sec[2]) + ");"
         #print "=" * 49
 
