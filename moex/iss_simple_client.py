@@ -102,7 +102,7 @@ class MicexISSClient:
             config: instance of the Config class with configuration options
             auth: instance of the MicexAuth class with authentication info
             handler: user's handler class inherited from MicexISSDataHandler
-            containet: user's container class
+            container: user's container class
         """
         if config.proxy_url:
             self.opener = urllib2.build_opener(urllib2.ProxyHandler({"http": config.proxy_url}),
@@ -142,10 +142,11 @@ class MicexISSClient:
             # node with the list of column IDs in 'data' in correct order;
             # it's also possible to use the iss.json=extended argument instead
             # to get all the IDs together with data (leads to more traffic)
-            jcols = jhist['columns']
-            secIdx = jcols.index('SECID')
-            closeIdx = jcols.index('CLOSE')
-            tradesIdx = jcols.index('VALUE')
+            iss.json = extended
+			#jcols = jhist['columns']
+            #secIdx = jcols.index('SECID')
+            #closeIdx = jcols.index('CLOSE')
+            #tradesIdx = jcols.index('VALUE')
 
             result = []
             for sec in jdata:
