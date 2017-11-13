@@ -14,8 +14,8 @@ import cookielib
 import json
 
 
-requests = {'history_secs': 'http://iss.moex.com/iss/history/engines/%(engine)s/markets/%(market)s/boards/%(board)s/securities.json?date=%(date)s'}
-#{'history_secs': 'http://iss.moex.com/iss/history/engines/iss/history/engines/%(engine)s/markets/%(market)s/securities.json?date=%(date)s'}
+#requests = {'history_secs': 'http://iss.moex.com/iss/history/engines/%(engine)s/markets/%(market)s/boards/%(board)s/securities.json?date=%(date)s'}
+requests = {'history_secs': 'https://iss.moex.com/iss/history/engines/%(engine)s/markets/%(market)s/securities.json?date=%(date)s'}
 
 class Config:
     def __init__(self, user='', password='', proxy_url='', debug_level=0):
@@ -144,8 +144,8 @@ class MicexISSClient:
             # to get all the IDs together with data (leads to more traffic)
             jcols = jhist['columns']
             secIdx = jcols.index('SECID')
-            closeIdx = jcols.index('LEGALCLOSEPRICE')
-            tradesIdx = jcols.index('NUMTRADES')
+            closeIdx = jcols.index('CLOSE')
+            tradesIdx = jcols.index('VALUE')
 
             result = []
             for sec in jdata:

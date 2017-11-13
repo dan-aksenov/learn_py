@@ -29,7 +29,7 @@ class MyData:
 
     def print_history(self):
         print "=" * 49
-        print "|%15s|%15s|%15s|" % ("SECID", "CLOSE", "TRADES")
+        print "|%15s|%15s|%15s|" % ("SECID", "CLOSE", "VALUE")
         print "=" * 49
         for sec in self.history:
             print "|%15s|%15.2f|%15d|" % (sec[0], sec[1], sec[2])
@@ -55,7 +55,7 @@ def main():
         iss.get_history_securities('stock',
                                    'shares',
                                    'eqne',
-                                   '2010-04-29')
+                                   '2017-11-10')
         iss.handler.data.print_history()
 
 if __name__ == '__main__':
