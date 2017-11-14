@@ -14,6 +14,7 @@
 
 import sys
 import datetime
+import csv
 from iss_simple_client import Config
 from iss_simple_client import MicexAuth
 from iss_simple_client import MicexISSClient
@@ -31,7 +32,10 @@ class MyData:
     def print_history(self):
         for sec in self.history:
             print sec[0] + "\t" + sec[1] + "\t" + str(sec[2]) + "\t" + str(sec[3])
-        
+        with open("D:\\tmp\\output.csv",'wb') as resultFile:
+            wr = csv.writer(resultFile, delimiter='\t')
+            wr.writerows(self.history)
+		
 class MyDataHandler(MicexISSDataHandler):
     """ This handler will be receiving pieces of data from the ISS client.
     """
