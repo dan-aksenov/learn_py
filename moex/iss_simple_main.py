@@ -30,8 +30,8 @@ class MyData:
         self.history = []
 
     def print_history(self):
-        #for sec in self.history:
-        #    print sec[0] + "\t" + sec[1] + "\t" + str(sec[2]) + "\t" + str(sec[3])
+        for sec in self.history:
+            print sec[0] + "\t" + sec[1] + "\t" + str(sec[2]) + "\t" + str(sec[3])
         with open("D:\\tmp\\output.csv",'ab') as resultFile:
             wr = csv.writer(resultFile, delimiter='\t')
             wr.writerows(self.history)
@@ -51,7 +51,7 @@ def main():
     my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
     """ Current date doesn't work during trade day. Can be run on evening. """
-    now = datetime.datetime.now()
+    now = datetime.datetime.now() - datetime.timedelta(days=1)
     if my_auth.is_real_time():
         iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
         iss.get_history_securities('stock',
