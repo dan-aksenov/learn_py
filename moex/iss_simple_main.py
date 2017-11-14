@@ -30,12 +30,12 @@ class MyData:
         self.history = []
 
     def print_history(self):
-        for sec in self.history:
-            print sec[0] + "\t" + sec[1] + "\t" + str(sec[2]) + "\t" + str(sec[3])
-        with open("D:\\tmp\\output.csv",'wb') as resultFile:
+        #for sec in self.history:
+        #    print sec[0] + "\t" + sec[1] + "\t" + str(sec[2]) + "\t" + str(sec[3])
+        with open("D:\\tmp\\output.csv",'ab') as resultFile:
             wr = csv.writer(resultFile, delimiter='\t')
             wr.writerows(self.history)
-		
+        
 class MyDataHandler(MicexISSDataHandler):
     """ This handler will be receiving pieces of data from the ISS client.
     """
@@ -50,8 +50,8 @@ class MyDataHandler(MicexISSDataHandler):
 def main():
     my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
-    """ not getting now in work hours. test it in eventing! """
-    now = datetime.datetime.now() - datetime.timedelta(days=4)
+    """ Current date doesn't work during trade day. Can be run on evening. """
+    now = datetime.datetime.now()
     if my_auth.is_real_time():
         iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
         iss.get_history_securities('stock',
@@ -60,6 +60,24 @@ def main():
                                    now.strftime("%Y-%m-%d"))
         iss.handler.data.print_history()
 
+def get_multiple( days_cnt ):
+    """ Loop function to get ranges of dates. """
+    now = datetime.datetime.now()
+    befoure = now - datetime.timedelta(days=days_cnt)
+    delta = now - befoure
+    my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
+    my_auth = MicexAuth(my_config)
+    
+    for i in range(delta.days + 1):
+        dt = befoure + datetime.timedelta(days=i)
+        if my_auth.is_real_time():
+            iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
+            iss.get_history_securities('stock',
+                                   'shares',
+                                   'tqbr',
+                                   dt.strftime("%Y-%m-%d"))
+            iss.handler.data.print_history()
+        
 if __name__ == '__main__':
     try:
         main()
