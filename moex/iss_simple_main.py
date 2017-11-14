@@ -29,17 +29,9 @@ class MyData:
         self.history = []
 
     def print_history(self):
-        #print "=" * 49
-        #print "|%15s|%15s|%15s|" % ("SECID", "CLOSE", "VALUE")
-        #print "=" * 49
-        """ Temporary added search pattern for TQBR. look to parse it from json"""
-        print "COPY sec_hist (dt, secid, pclose, volume) FROM stdin;"
         for sec in self.history:
-        #   print "|%15s|%15.2f|%15d|" % (sec[0], sec[1], sec[2])
-            print "insert into mytable values(" + str(sec[0]), str(sec[1]), str(sec[2]) + ");"
-        #print "=" * 49
-
-
+            print sec[0] + "\t" + sec[1] + "\t" + str(sec[2]) + "\t" + str(sec[3])
+        
 class MyDataHandler(MicexISSDataHandler):
     """ This handler will be receiving pieces of data from the ISS client.
     """
@@ -55,7 +47,7 @@ def main():
     my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
     """ not getting now in work hours. test it in eventing! """
-    now = datetime.datetime.now() -  datetime.timedelta(days=4)
+    now = datetime.datetime.now() - datetime.timedelta(days=4)
     if my_auth.is_real_time():
         iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
         iss.get_history_securities('stock',

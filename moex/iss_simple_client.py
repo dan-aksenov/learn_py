@@ -144,14 +144,14 @@ class MicexISSClient:
             # to get all the IDs together with data (leads to more traffic)
             #iss.json = extended
             jcols = jhist['columns']
-            #brdIdx = jcols.index('BOARDID')
+            dtIdx = jcols.index('TRADEDATE')
             secIdx = jcols.index('SECID')
             closeIdx = jcols.index('CLOSE')
             tradesIdx = jcols.index('VALUE')
 
             result = []
             for sec in jdata:
-                result.append(( #sec[brdIdx],
+                result.append(( sec[dtIdx],
                                sec[secIdx],
                                del_null(sec[closeIdx]),
                                del_null(sec[tradesIdx])))
