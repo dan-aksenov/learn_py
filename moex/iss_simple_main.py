@@ -35,10 +35,8 @@ class MyData:
         """ Temporary added search pattern for TQBR. look to parse it from json"""
         print "COPY sec_hist (dt, secid, pclose, volume) FROM stdin;"
         for sec in self.history:
-        #    print "|%15s|%15.2f|%15d|" % (sec[0], sec[1], sec[2])
-            if 'TQBR' in sec:
-                print sec[1], sec[2], sec[3]
-            #print "insert into mytable values(" + str(sec[0]), str(sec[1]), str(sec[2]) + ");"
+        #   print "|%15s|%15.2f|%15d|" % (sec[0], sec[1], sec[2])
+            print "insert into mytable values(" + str(sec[0]), str(sec[1]), str(sec[2]) + ");"
         #print "=" * 49
 
 
@@ -62,7 +60,7 @@ def main():
         iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
         iss.get_history_securities('stock',
                                    'shares',
-                                   'eqne',
+                                   'tqbr',
                                    now.strftime("%Y-%m-%d"))
         iss.handler.data.print_history()
 
