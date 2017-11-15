@@ -48,9 +48,10 @@ class MyDataHandler(MicexISSDataHandler):
 
 
 def main():
+    """Get current day's data and store it in file."""
     my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
-    """ Current date doesn't work during trade day. Can be run on evening. """
+    """ Current date doesn't work during trade day. Can be run on evening after."""
     now = datetime.datetime.now() - datetime.timedelta(days=1)
     if my_auth.is_real_time():
         iss = MicexISSClient(my_config, my_auth, MyDataHandler, MyData)
