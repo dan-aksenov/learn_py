@@ -68,7 +68,8 @@ CREATE VIEW stock_w_ma AS
     stock_hist.close,
     avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 10 PRECEDING AND CURRENT ROW) AS ma10,
     avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 20 PRECEDING AND CURRENT ROW) AS ma20,
-    lag(stock_hist.close) over (PARTITION BY stock_hist.ticker ORDER BY dt) as yest_cl,
+    round(stock_hist.volume*(stock_hist.close-
+    lag(stock_hist.close) over (PARTITION BY stock_hist.ticker ORDER BY dt))) as raw_fi,
     stock_hist.volume
    FROM stock_hist;
 
