@@ -147,13 +147,19 @@ class MicexISSClient:
             dtIdx = jcols.index('TRADEDATE')
             secIdx = jcols.index('SECID')
             closeIdx = jcols.index('CLOSE')
+            openIdx = jcols.index('OPEN')
+            highIdx = jcols.index('HIGH')
+            lowIdx = jcols.index('LOW') 
             tradesIdx = jcols.index('VALUE')
 
             result = []
             for sec in jdata:
                 result.append(( sec[dtIdx],
                                sec[secIdx],
+                               del_null(sec[openIdx]),
                                del_null(sec[closeIdx]),
+                               del_null(sec[lowIdx]),
+                               del_null(sec[highIdx]),
                                del_null(sec[tradesIdx])))
             # we return pieces of received data on each iteration
             # in order to be able to handle large volumes of data

@@ -31,7 +31,7 @@ class MyData:
 
     def print_history(self):
         for sec in self.history:
-            print sec[0] + "\t" + sec[1] + "\t" + str(sec[2]) + "\t" + str(sec[3])
+            print sec
         with open("/tmp/output.csv",'ab') as resultFile:
             wr = csv.writer(resultFile, delimiter='\t')
             wr.writerows(self.history)

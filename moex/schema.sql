@@ -36,27 +36,15 @@ SET default_with_oids = false;
 CREATE TABLE stock_hist (
     dt date,
     ticker text,
+    open double precision,
     close double precision,
+    low double precision,
+    high double precision,
     volume double precision
 );
 
 
 ALTER TABLE stock_hist OWNER TO pi;
-
---
--- Name: sber_w_ma; Type: VIEW; Schema: public; Owner: pi
---
-
-CREATE VIEW sber_w_ma AS
- SELECT stock_hist.dt,
-    stock_hist.close,
-    avg(stock_hist.close) OVER (ORDER BY stock_hist.dt ROWS BETWEEN 10 PRECEDING AND CURRENT ROW) AS ma10,
-    avg(stock_hist.close) OVER (ORDER BY stock_hist.dt ROWS BETWEEN 20 PRECEDING AND CURRENT ROW) AS ma20
-   FROM stock_hist
-  WHERE (stock_hist.ticker = 'SBER'::text);
-
-
-ALTER TABLE sber_w_ma OWNER TO pi;
 
 --
 -- Name: stock_w_ma; Type: VIEW; Schema: public; Owner: pi
