@@ -1,5 +1,5 @@
 {
-   "gateway": "some.site",
-   "access_key": "434A2UHTCPKYJOTUFFOL",
-   "secret_key": "QZfwhMffQ7knQ7xwKUlvAx4b3wapKCZkgnHxpLpE"
+   "gateway": "someserver:7480",
+   "access_key": "acCe$s_K3y",
+   "secret_key": "s@cRet_Kei"
 }	
