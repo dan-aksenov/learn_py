@@ -10,11 +10,11 @@ import json
 from boto.s3.key import Key
 
 # Got from http://docs.ceph.com/docs/master/install/install-ceph-gateway
-def s3connect():
+def s3connect( config_file ):
    "Connect to given s3 gateway."
    # Read gateway name and access keys from json conf file.
    try:
-      with open('s3conf.json') as config_file:    
+      with open( config_file ) as config_file:    
          conn_data = json.load(config_file)
    except:
       print "Error: Config file does not exist."
