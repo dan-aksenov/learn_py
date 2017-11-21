@@ -13,8 +13,8 @@ from boto.s3.key import Key
 def s3connect( config_file ):
     "Connect to given s3 gateway using config file."
     try:
-        with open( config_file ) as config_file:    
-            conn_data = json.load(config_file)
+        with open( config_file ) as cfg_file:    
+            conn_data = json.load(cfg_file)
     except:
         print "Error: Unable to read config file. "
         return 1
@@ -57,7 +57,7 @@ def put_file( buck_name, file_name ):
         sys.stdout.flush()
 
     k = Key(buck)
-    k.key = 'my_test_file.txt'
+    k.key = file_name
     k.set_contents_from_filename(file_name,
         cb=percent_cb, num_cb=10)
 
