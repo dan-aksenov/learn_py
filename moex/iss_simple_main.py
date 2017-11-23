@@ -32,7 +32,7 @@ class MyData:
     def print_history(self):
         for sec in self.history:
             print sec
-        with open("/tmp/output.csv",'ab') as resultFile:
+        with open(raw_input('filename: '),'ab') as resultFile:
             wr = csv.writer(resultFile, delimiter='\t')
             wr.writerows(self.history)
         
