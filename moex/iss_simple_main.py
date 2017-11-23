@@ -49,6 +49,7 @@ class MyDataHandler(MicexISSDataHandler):
 
 def main():
     """Get current day's data and store it in file."""
+    global outfile
     outfile = raw_input('filename: ')
     my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
@@ -64,6 +65,7 @@ def main():
 
 def get_multiple( days_cnt ):
     """ Loop function to get ranges of dates. """
+    global outfile
     outfile = raw_input('output file: ')
     now = datetime.datetime.now()
     befoure = now - datetime.timedelta(days=days_cnt)
