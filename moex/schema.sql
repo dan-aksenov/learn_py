@@ -34,6 +34,36 @@ ALTER PROCEDURAL LANGUAGE plpythonu OWNER TO pi;
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: ema_func(numeric, double precision, numeric); Type: FUNCTION; Schema: public; Owner: pi
+--
+
+CREATE FUNCTION ema_func(state numeric, inval double precision, alpha numeric) RETURNS numeric
+    LANGUAGE plpgsql
+    AS $$
+begin
+  return case
+         when state is null then inval
+         else alpha * inval + (1-alpha) * state
+         end;
+end
+$$;
+
+
+ALTER FUNCTION public.ema_func(state numeric, inval double precision, alpha numeric) OWNER TO pi;
+
+--
+-- Name: ema(double precision, numeric); Type: AGGREGATE; Schema: public; Owner: pi
+--
+
+CREATE AGGREGATE ema(double precision, numeric) (
+    SFUNC = ema_func,
+    STYPE = numeric
+);
+
+
+ALTER AGGREGATE public.ema(double precision, numeric) OWNER TO pi;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -65,8 +95,7 @@ CREATE VIEW stock_w_ma AS
     stock_hist.close,
     avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 10 PRECEDING AND CURRENT ROW) AS ma10,
     avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 20 PRECEDING AND CURRENT ROW) AS ma20,
-    (avg((stock_hist.high+stock_hist.low)/2) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 34 PRECEDING AND CURRENT ROW)
-   - avg((stock_hist.high+stock_hist.low)/2) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 5 PRECEDING AND CURRENT ROW)) AS AO,
+    (avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 34 PRECEDING AND CURRENT ROW) - avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 5 PRECEDING AND CURRENT ROW)) AS ao,
     round((stock_hist.volume * (stock_hist.close - lag(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt)))) AS raw_fi,
     stock_hist.volume
    FROM stock_hist;
