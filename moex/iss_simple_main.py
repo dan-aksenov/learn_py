@@ -32,7 +32,7 @@ class MyData:
     def print_history(self):
         for sec in self.history:
             print sec
-        with open(raw_input('filename: '),'ab') as resultFile:
+        with open(outfile,'ab') as resultFile:
             wr = csv.writer(resultFile, delimiter='\t')
             wr.writerows(self.history)
         
@@ -49,6 +49,7 @@ class MyDataHandler(MicexISSDataHandler):
 
 def main():
     """Get current day's data and store it in file."""
+    outfile = raw_input('filename: ')
     my_config = Config(user=raw_input('username:'), password=raw_input('password:'), proxy_url='')
     my_auth = MicexAuth(my_config)
     """ Current date doesn't work during trade day. Can be run on evening after."""
@@ -63,6 +64,7 @@ def main():
 
 def get_multiple( days_cnt ):
     """ Loop function to get ranges of dates. """
+    outfile = raw_input('filename: ')
     now = datetime.datetime.now()
     befoure = now - datetime.timedelta(days=days_cnt)
     delta = now - befoure
