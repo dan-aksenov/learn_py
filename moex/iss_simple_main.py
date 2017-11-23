@@ -64,7 +64,7 @@ def main():
 
 def get_multiple( days_cnt ):
     """ Loop function to get ranges of dates. """
-    outfile = raw_input('filename: ')
+    outfile = raw_input('output file: ')
     now = datetime.datetime.now()
     befoure = now - datetime.timedelta(days=days_cnt)
     delta = now - befoure
