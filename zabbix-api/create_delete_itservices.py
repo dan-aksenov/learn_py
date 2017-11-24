@@ -9,23 +9,8 @@ from zabbix_api import ZabbixAPI
 zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix")
 zapi.login("Admin", "zabbix")
 
-# Set parent it-service name. In this setup its the same as agent's/host name.
-a_zabbix_agents = [    
-'pts-tst-as1.fors.ru',
-'pts-tst-as2.fors.ru',
-'pts-tst-db1c.fors.ru',
-'pts-tst-db2c.fors.ru',
-'pts-tst-bi.fors.ru',
-'pts-tst-brm1.fors.ru',
-'pts-dev-db.fors.ru',
-'pts-tst-log.fors.ru',
-'pts-dev-as2.fors.ru',
-'pts-dev-as1.fors.ru'
-]
-
-# Master service. Here based on IT product name.
-#v_master_service = 'ODS_PROD'
-v_master_service = raw_input("Master service: ")
+def cre_master_service():
+    zapi.service.create({"name": v_master_service,"algorithm": 1,"showsla": 0,"sortorder": 1})
 
 # Create service block.
 # Create parent services, based on host/agent names. Make them child of master service.
@@ -35,12 +20,12 @@ def cre_host_srv():
         # Get master service id.
         v_parent_id = zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
         # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
-        v_service_create_result = zapi.service.create({"name": a_zabbix_agents[i],"algorithm": 1,"showsla": 1,"goodsla": 99.99,"sortorder": 1})
+        v_service_create_result = zapi.service.create({"name": a_zabbix_agents[i],"algorithm": 1,"showsla": 0,"sortorder": 1})
         # Update parents dependencies. Get service id from preivous command result.
         zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
 
 # Create trigger based services. Make them children of agetn/host services.
-# todo: convert to function       
+ 
 def cre_trig_sev():
     ''' Для каждой услуги-узла создание потомков на основе триггеров '''
     for i in range(0, len(a_zabbix_agents)):
@@ -51,13 +36,12 @@ def cre_trig_sev():
         # Create service based on trigger for selected host to be run in loop.
         for i in range(0, len(v_host_triggs)):
             # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
-            v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"sortorder": 1,"triggerid": v_host_triggs[i]['triggerid']})
+            v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"showsla": 0,"sortorder": 1,"triggerid": v_host_triggs[i]['triggerid']})
             #v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"sortorder": 1,"showsla": 1,"goodsla": 99.99,"triggerid": v_host_triggs[i]['triggerid']})
             # Update parents dependencies. Get service id from preivous command result.
             zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
 
 # Delete block.
-# todo: convert to function
 # Delete trigger-services.
 def del_trig_srv():
     ''' Удаление услуг на основе триггеров'''
@@ -79,3 +63,16 @@ def del_host_srv():
         # Get serviceid.
         v_service_id =  zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
         zapi.service.delete([v_service_id])
+
+def main():
+    global a_zabbix_agents
+    # Set parent it-service name. In this setup its the same as agent's/host name.
+    a_zabbix_agents = ['ods-Zabbix-proxy', 'ods-wl-03', 'ods-wl-02', 'ods-wl-01', 'ods-mdbtele-03','ods-mdbtele-02','ods-mdbtele-01','ods-dbvm-02','ods-dbvm-01','ods-db-test','ods-bi-01','ods-bbd-02','ods-bbd-01','ods-bal-01','ods-app-test']
+    # Master service. Here based on IT product name.
+    global v_master_service
+    v_master_service = raw_input("Master service: ")
+	cre_host_srv()
+	cre_trig_sev()
+	
+if __name__ == '__main__':
+    main()
