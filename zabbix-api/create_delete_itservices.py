@@ -6,7 +6,7 @@
 # Import api and connect to zabbix.
 from zabbix_api import ZabbixAPI
 
-zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix321")
+zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix")
 zapi.login("Admin", "zabbix")
 
 # Set parent it-service name. In this setup its the same as agent's/host name.
