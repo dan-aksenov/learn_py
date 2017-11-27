@@ -67,15 +67,17 @@ def del_host_srv():
 def main():
     # Master service. Here based on IT product name.
     global v_master_service
-    v_master_service = raw_input("Master service: ")
-	
-	global a_zabbix_agents
+    v_master_service = raw_input("Enter master service name: ")
+    
+    global a_zabbix_agents
     # Set parent it-service name. In this setup its the same as agent's/host name.
-    a_zabbix_agents = ['ods-Zabbix-proxy', 'ods-wl-03', 'ods-wl-02', 'ods-wl-01', 'ods-mdbtele-03','ods-mdbtele-02','ods-mdbtele-01','ods-dbvm-02','ods-dbvm-01','ods-db-test','ods-bi-01','ods-bbd-02','ods-bbd-01','ods-bal-01','ods-app-test']
-	
-	cre_master_service()
-	cre_host_srv()
-	cre_trig_sev()
-	
+    zabbix_agents = raw_input("Enter space separated list of zabbix agents: ")
+    a_zabbix_agents = string_input.split()
+    #a_zabbix_agents = ['oati-wl-02','oati-wl-01','oati-test-db','oati-test-app','oati-db-02','oati-db-01','oati-bpm-01','oati-bi-01','oati-bal-01']
+    
+    cre_master_service()
+    cre_host_srv()
+    cre_trig_sev()
+    
 if __name__ == '__main__':
     main()
