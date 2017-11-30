@@ -104,6 +104,20 @@ CREATE VIEW stock_w_ma AS
 ALTER TABLE stock_w_ma OWNER TO pi;
 
 --
+-- Name: stock_w_ema; Type: VIEW; Schema: public; Owner: pi
+--
+
+CREATE VIEW stock_w_ema AS
+ SELECT stock_w_ma.dt,
+    stock_w_ma.close,
+    ema(stock_w_ma.close, 0.181818) OVER (PARTITION BY stock_w_ma.ticker ORDER BY stock_w_ma.dt) AS ema10,
+    ema(stock_w_ma.close, 0.095238) OVER (PARTITION BY stock_w_ma.ticker ORDER BY stock_w_ma.dt) AS ema20
+   FROM stock_w_ma;
+
+
+ALTER TABLE stock_w_ema OWNER TO pi;
+
+--
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
 
