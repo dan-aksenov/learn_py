@@ -112,7 +112,8 @@ CREATE VIEW stock_w_ema AS
     stock_w_ma.ticker,
     stock_w_ma.close,
     ema(stock_w_ma.close, 0.181818) OVER (PARTITION BY stock_w_ma.ticker ORDER BY stock_w_ma.dt) AS ema10,
-    ema(stock_w_ma.close, 0.095238) OVER (PARTITION BY stock_w_ma.ticker ORDER BY stock_w_ma.dt) AS ema20
+    ema(stock_w_ma.close, 0.095238) OVER (PARTITION BY stock_w_ma.ticker ORDER BY stock_w_ma.dt) AS ema20,
+    stock_w_ma.volume
    FROM stock_w_ma;
 
 
