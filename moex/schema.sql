@@ -103,11 +103,14 @@ SELECT stock_hist.dt,
 
 ALTER TABLE stock_w_ema OWNER TO pi;
 
-create view stock_w_fi as
+create or replace view stock_w_fi as
 select 
 dt, ticker,
 close,
-ema10, ema20, ao,
+lag(close) OVER (PARTITION BY ticker ORDER BY dt) as prev_close,
+ema10, ema20,
+ao,
+lag(ao) OVER (PARTITION BY ticker ORDER BY dt) as prev_ao,
 ema(raw_fi, 0.333333) OVER (PARTITION BY ticker ORDER BY dt) AS fi2,
 ema(raw_fi, 0.071429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13
 from stock_w_ema;
