@@ -108,14 +108,16 @@ ALTER TABLE stock_w_ma OWNER TO pi;
 --
 
 CREATE VIEW stock_w_ema AS
- SELECT stock_w_ma.dt,
-    stock_w_ma.ticker,
-    stock_w_ma.close,
-    ema(stock_w_ma.close, 0.181818) OVER (PARTITION BY stock_w_ma.ticker ORDER BY stock_w_ma.dt) AS ema10,
-    ema(stock_w_ma.close, 0.095238) OVER (PARTITION BY stock_w_ma.ticker ORDER BY stock_w_ma.dt) AS ema20,
-    stock_w_ma.volume
-   FROM stock_w_ma;
-
+SELECT stock_hist.dt,
+    stock_hist.ticker,
+    stock_hist.close,
+    ema(stock_hist.close, 0.181818) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt) AS ema10,
+    ema(stock_hist.close, 0.095238) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt) AS ema20,
+    (avg((stock_hist.high-stock_hist.low)/2) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 34 PRECEDING AND CURRENT ROW)
+     - avg((stock_hist.high-stock_hist.low)/2) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 5 PRECEDING AND CURRENT ROW)) AS ao,
+   round((stock_hist.volume * (stock_hist.close - lag(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt)))) AS raw_fi,
+   stock_hist.volume
+   FROM stock_hist;
 
 ALTER TABLE stock_w_ema OWNER TO pi;
 
