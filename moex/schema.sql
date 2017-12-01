@@ -124,8 +124,8 @@ ema(raw_fi, 0.1428571428571429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13,
 volume
 from stock_w_ema;
 
-drop view advice;
-create view advice as
+drop view advice_up_idx;
+create view advice_up_idx as
 select dt,
 ticker,close,
 ao,
@@ -139,8 +139,31 @@ and fi2 < 0
 --and ao > prev_ao
 and ema10 > week_ago_ema10
 and ema20 > week_ago_ema20
-order by volume desc
+/*and ticker in (
+'SBER','SBERP','GAZP','LKOH','MGNT','GMKN','NVTK','SNGS','SNGSP','ROSN','VTBR','TATN','TATNP','MTSS','ALRS','CHMF','MOEX','NLMK','IRAO','YNDX','POLY','PLZL','TRNFP','AFLT','RUAL','PHOR','HYDR','PIKK','MAGN',
+'RTKM','MFON','FEES','AFKS','RNFT','MTLR','EPLN','UPRO','LSRG','CBOM','DSKY','RSTI','NMTP','TRMK','MVID','AGRO','MSNG','UWGN','AKRN','DIXY','LNTA')*/
+;
 
+drop view advice_down_idx;
+create view advice_down_idx as
+select dt,
+ticker,close,
+ao,
+ema10,ema20,
+fi2,fi13,volume
+from stock_w_fi where dt = (select max(dt) from stock_hist)
+--and ema10 > ema20
+and fi2 > 0
+and fi13 < 0
+--and ema10 > prev_ema10
+--and ema20 > prev_ema20
+--and ao > prev_ao
+and ema10 < week_ago_ema10
+and ema20 < week_ago_ema20
+/*and ticker in (
+'SBER','SBERP','GAZP','LKOH','MGNT','GMKN','NVTK','SNGS','SNGSP','ROSN','VTBR','TATN','TATNP','MTSS','ALRS','CHMF','MOEX','NLMK','IRAO','YNDX','POLY','PLZL','TRNFP','AFLT','RUAL','PHOR','HYDR','PIKK','MAGN',
+'RTKM','MFON','FEES','AFKS','RNFT','MTLR','EPLN','UPRO','LSRG','CBOM','DSKY','RSTI','NMTP','TRMK','MVID','AGRO','MSNG','UWGN','AKRN','DIXY','LNTA')*/
+;
 
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
