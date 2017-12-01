@@ -93,8 +93,8 @@ CREATE VIEW stock_w_ema AS
 SELECT stock_hist.dt,
     stock_hist.ticker,
     stock_hist.close,
-    ema(stock_hist.close, 0.181818) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt) AS ema10,
-    ema(stock_hist.close, 0.095238) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt) AS ema20,
+    ema(stock_hist.close, 0.1818181818181818) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt) AS ema10,
+    ema(stock_hist.close, 0.0952380952380952) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt) AS ema20,
     (avg((stock_hist.high-stock_hist.low)/2) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 34 PRECEDING AND CURRENT ROW)
      - avg((stock_hist.high-stock_hist.low)/2) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 5 PRECEDING AND CURRENT ROW)) AS ao,
    round((stock_hist.volume * (stock_hist.close - lag(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt)))) AS raw_fi,
@@ -103,16 +103,20 @@ SELECT stock_hist.dt,
 
 ALTER TABLE stock_w_ema OWNER TO pi;
 
+drop view stock_w_fi;
 create or replace view stock_w_fi as
 select 
 dt, ticker,
 close,
 lag(close) OVER (PARTITION BY ticker ORDER BY dt) as prev_close,
-ema10, ema20,
+ema10,
+lag(ema10) OVER (PARTITION BY ticker ORDER BY dt) as prev_ema10,
+ema20,
+lag(ema20) OVER (PARTITION BY ticker ORDER BY dt) as prev_ema20,
 ao,
 lag(ao) OVER (PARTITION BY ticker ORDER BY dt) as prev_ao,
-ema(raw_fi, 0.333333) OVER (PARTITION BY ticker ORDER BY dt) AS fi2,
-ema(raw_fi, 0.071429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13
+ema(raw_fi, 0.6666666666666667) OVER (PARTITION BY ticker ORDER BY dt) AS fi2,
+ema(raw_fi, 0.1428571428571429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13
 from stock_w_ema;
 
 --
