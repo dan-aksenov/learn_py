@@ -117,7 +117,8 @@ lag(ema20) OVER (PARTITION BY ticker ORDER BY dt) as prev_ema20,
 ao,
 lag(ao) OVER (PARTITION BY ticker ORDER BY dt) as prev_ao,
 ema(raw_fi, 0.6666666666666667) OVER (PARTITION BY ticker ORDER BY dt) AS fi2,
-ema(raw_fi, 0.1428571428571429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13
+ema(raw_fi, 0.1428571428571429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13,
+volume
 from stock_w_ema;
 
 create view advice as
@@ -125,14 +126,14 @@ select dt,
 ticker,close,
 ao,
 ema10,ema20,
-fi2
+fi2,volume
 from stock_w_fi where dt = (select max(dt) from stock_hist)
-and ema10 > ema20 and fi2 < 0
-and ema10 > prev_ema10
-and ema20>prev_ema20
-and ao > prev_ao
-and close > week_ago_close;
-
+--and ema10 > ema20
+and fi2 < 0
+--and ema10 > prev_ema10
+--and ema20>prev_ema20
+--and ao > prev_ao
+and close > week_ago_close order by volume desc
 --
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
