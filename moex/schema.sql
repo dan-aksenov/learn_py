@@ -109,6 +109,7 @@ select
 dt, ticker,
 close,
 lag(close) OVER (PARTITION BY ticker ORDER BY dt) as prev_close,
+lag(close,7) OVER (PARTITION BY ticker ORDER BY dt) as week_ago_close,
 ema10,
 lag(ema10) OVER (PARTITION BY ticker ORDER BY dt) as prev_ema10,
 ema20,
