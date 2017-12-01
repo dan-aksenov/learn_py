@@ -120,6 +120,19 @@ ema(raw_fi, 0.6666666666666667) OVER (PARTITION BY ticker ORDER BY dt) AS fi2,
 ema(raw_fi, 0.1428571428571429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13
 from stock_w_ema;
 
+create view advice as
+select dt,
+ticker,close,
+ao,
+ema10,ema20,
+fi2
+from stock_w_fi where dt = (select max(dt) from stock_hist)
+and ema10 > ema20 and fi2 < 0
+and ema10 > prev_ema10
+and ema20>prev_ema20
+and ao > prev_ao
+and close > week_ago_close;
+
 --
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
