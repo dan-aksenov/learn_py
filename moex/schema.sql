@@ -86,24 +86,6 @@ CREATE TABLE stock_hist (
 ALTER TABLE stock_hist OWNER TO pi;
 
 --
--- Name: stock_w_ma; Type: VIEW; Schema: public; Owner: pi
---
-
-CREATE VIEW stock_w_ma AS
- SELECT stock_hist.dt,
-    stock_hist.ticker,
-    stock_hist.close,
-    avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 10 PRECEDING AND CURRENT ROW) AS ma10,
-    avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 20 PRECEDING AND CURRENT ROW) AS ma20,
-    (avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 34 PRECEDING AND CURRENT ROW) - avg(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 5 PRECEDING AND CURRENT ROW)) AS ao_raw,
-    round((stock_hist.volume * (stock_hist.close - lag(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt)))) AS raw_fi,
-    stock_hist.volume
-   FROM stock_hist;
-
-
-ALTER TABLE stock_w_ma OWNER TO pi;
-
---
 -- Name: stock_w_ema; Type: VIEW; Schema: public; Owner: pi
 --
 
@@ -120,6 +102,15 @@ SELECT stock_hist.dt,
    FROM stock_hist;
 
 ALTER TABLE stock_w_ema OWNER TO pi;
+
+create view stock_w_fi as
+select 
+dt, ticker,
+close,
+ema10, ema20, ao,
+ema(raw_fi, 0.333333) OVER (PARTITION BY ticker ORDER BY dt) AS fi2,
+ema(raw_fi, 0.071429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13
+from stock_w_ema;
 
 --
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
