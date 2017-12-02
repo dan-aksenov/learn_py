@@ -90,81 +90,88 @@ ALTER TABLE stock_hist OWNER TO pi;
 --
 
 CREATE VIEW stock_w_ema AS
-SELECT stock_hist.dt,
+ SELECT stock_hist.dt,
     stock_hist.ticker,
     stock_hist.close,
     ema(stock_hist.close, 0.1818181818181818) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt) AS ema10,
     ema(stock_hist.close, 0.0952380952380952) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt) AS ema20,
-    (avg((stock_hist.high-stock_hist.low)/2) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 34 PRECEDING AND CURRENT ROW)
-     - avg((stock_hist.high-stock_hist.low)/2) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 5 PRECEDING AND CURRENT ROW)) AS ao,
-   round((stock_hist.volume * (stock_hist.close - lag(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt)))) AS raw_fi,
-   stock_hist.volume
+    (avg(((stock_hist.high - stock_hist.low) / (2)::double precision)) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 34 PRECEDING AND CURRENT ROW) - avg(((stock_hist.high - stock_hist.low) / (2)::double precision)) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt ROWS BETWEEN 5 PRECEDING AND CURRENT ROW)) AS ao,
+    round((stock_hist.volume * (stock_hist.close - lag(stock_hist.close) OVER (PARTITION BY stock_hist.ticker ORDER BY stock_hist.dt)))) AS raw_fi,
+    stock_hist.volume
    FROM stock_hist;
+
 
 ALTER TABLE stock_w_ema OWNER TO pi;
 
-drop view stock_w_fi;
-create or replace view stock_w_fi as
-select 
-dt, ticker,
-close,
-lag(close) OVER (PARTITION BY ticker ORDER BY dt) as prev_close,
-lag(close,7) OVER (PARTITION BY ticker ORDER BY dt) as week_ago_close,
-ema10,
-lag(ema10) OVER (PARTITION BY ticker ORDER BY dt) as prev_ema10,
-lag(ema10,7) OVER (PARTITION BY ticker ORDER BY dt) as week_ago_ema10,
-ema20,
-lag(ema20) OVER (PARTITION BY ticker ORDER BY dt) as prev_ema20,
-lag(ema20,7) OVER (PARTITION BY ticker ORDER BY dt) as week_ago_ema20,
-ao,
-lag(ao) OVER (PARTITION BY ticker ORDER BY dt) as prev_ao,
-lag(ao,7) OVER (PARTITION BY ticker ORDER BY dt) as week_ago_ao,
-ema(raw_fi, 0.6666666666666667) OVER (PARTITION BY ticker ORDER BY dt) AS fi2,
-ema(raw_fi, 0.1428571428571429) OVER (PARTITION BY ticker ORDER BY dt) AS fi13,
-volume
-from stock_w_ema;
+--
+-- Name: stock_w_fi; Type: VIEW; Schema: public; Owner: pi
+--
 
-drop view advice_up_idx;
-create view advice_up_idx as
-select dt,
-ticker,close,
-ao,
-ema10,ema20,
-fi2,volume
-from stock_w_fi where dt = (select max(dt) from stock_hist)
---and ema10 > ema20
-and fi2 < 0
---and ema10 > prev_ema10
---and ema20>prev_ema20
---and ao > prev_ao
-and ema10 > week_ago_ema10
-and ema20 > week_ago_ema20
-/*and ticker in (
-'SBER','SBERP','GAZP','LKOH','MGNT','GMKN','NVTK','SNGS','SNGSP','ROSN','VTBR','TATN','TATNP','MTSS','ALRS','CHMF','MOEX','NLMK','IRAO','YNDX','POLY','PLZL','TRNFP','AFLT','RUAL','PHOR','HYDR','PIKK','MAGN',
-'RTKM','MFON','FEES','AFKS','RNFT','MTLR','EPLN','UPRO','LSRG','CBOM','DSKY','RSTI','NMTP','TRMK','MVID','AGRO','MSNG','UWGN','AKRN','DIXY','LNTA')*/
-;
+CREATE VIEW stock_w_fi AS
+ SELECT stock_w_ema.dt,
+    stock_w_ema.ticker,
+    stock_w_ema.close,
+    lag(stock_w_ema.close) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS prev_close,
+    lag(stock_w_ema.close, 7) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS week_ago_close,
+    stock_w_ema.ema10,
+    lag(stock_w_ema.ema10) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS prev_ema10,
+    lag(stock_w_ema.ema10, 7) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS week_ago_ema10,
+    stock_w_ema.ema20,
+    lag(stock_w_ema.ema20) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS prev_ema20,
+    lag(stock_w_ema.ema20, 7) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS week_ago_ema20,
+    stock_w_ema.ao,
+    lag(stock_w_ema.ao) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS prev_ao,
+    lag(stock_w_ema.ao, 7) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS week_ago_ao,
+    ema(stock_w_ema.raw_fi, 0.6666666666666667) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS fi2,
+    ema(stock_w_ema.raw_fi, 0.1428571428571429) OVER (PARTITION BY stock_w_ema.ticker ORDER BY stock_w_ema.dt) AS fi13,
+    stock_w_ema.volume
+   FROM stock_w_ema;
 
-drop view advice_down_idx;
-create view advice_down_idx as
-select dt,
-ticker,close,
-ao,
-ema10,ema20,
-fi2,fi13,volume
-from stock_w_fi where dt = (select max(dt) from stock_hist)
---and ema10 > ema20
-and fi2 > 0
-and fi13 < 0
---and ema10 > prev_ema10
---and ema20 > prev_ema20
---and ao > prev_ao
-and ema10 < week_ago_ema10
-and ema20 < week_ago_ema20
-/*and ticker in (
-'SBER','SBERP','GAZP','LKOH','MGNT','GMKN','NVTK','SNGS','SNGSP','ROSN','VTBR','TATN','TATNP','MTSS','ALRS','CHMF','MOEX','NLMK','IRAO','YNDX','POLY','PLZL','TRNFP','AFLT','RUAL','PHOR','HYDR','PIKK','MAGN',
-'RTKM','MFON','FEES','AFKS','RNFT','MTLR','EPLN','UPRO','LSRG','CBOM','DSKY','RSTI','NMTP','TRMK','MVID','AGRO','MSNG','UWGN','AKRN','DIXY','LNTA')*/
-;
 
+ALTER TABLE stock_w_fi OWNER TO pi;
+
+--
+-- Name: advice_down_idx; Type: VIEW; Schema: public; Owner: pi
+--
+
+CREATE VIEW advice_down_idx AS
+ SELECT stock_w_fi.dt,
+    stock_w_fi.ticker,
+    stock_w_fi.close,
+    stock_w_fi.ao,
+    stock_w_fi.ema10,
+    stock_w_fi.ema20,
+    stock_w_fi.fi2,
+    stock_w_fi.fi13,
+    stock_w_fi.volume
+   FROM stock_w_fi
+  WHERE (((((stock_w_fi.dt = ( SELECT max(stock_hist.dt) AS max
+           FROM stock_hist)) AND (stock_w_fi.fi2 > (0)::numeric)) AND (stock_w_fi.fi13 < (0)::numeric)) AND (stock_w_fi.ema10 < stock_w_fi.week_ago_ema10)) AND (stock_w_fi.ema20 < stock_w_fi.week_ago_ema20));
+
+
+ALTER TABLE advice_down_idx OWNER TO pi;
+
+--
+-- Name: advice_up_idx; Type: VIEW; Schema: public; Owner: pi
+--
+
+CREATE VIEW advice_up_idx AS
+ SELECT stock_w_fi.dt,
+    stock_w_fi.ticker,
+    stock_w_fi.close,
+    stock_w_fi.ao,
+    stock_w_fi.ema10,
+    stock_w_fi.ema20,
+    stock_w_fi.fi2,
+    stock_w_fi.volume
+   FROM stock_w_fi
+  WHERE ((((stock_w_fi.dt = ( SELECT max(stock_hist.dt) AS max
+           FROM stock_hist)) AND (stock_w_fi.fi2 < (0)::numeric)) AND (stock_w_fi.ema10 > stock_w_fi.week_ago_ema10)) AND (stock_w_fi.ema20 > stock_w_fi.week_ago_ema20));
+
+
+ALTER TABLE advice_up_idx OWNER TO pi;
+
+--
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
 
