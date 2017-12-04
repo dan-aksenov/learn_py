@@ -49,6 +49,8 @@ def buck_add( buck_name ):
     buck = conn.create_bucket( buck_name )
     return buck;
 
+#Bucket delete function here
+    
 # Got from https://stackoverflow.com/questions/15085864/how-to-upload-a-file-to-directory-in-s3-bucket-using-boto
 def put_file( buck_name, file_name ):
     "Insert file to bucket. Create bucket if not exists."
