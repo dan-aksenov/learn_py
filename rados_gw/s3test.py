@@ -12,6 +12,7 @@ from boto.s3.key import Key
 # Got from http://docs.ceph.com/docs/master/install/install-ceph-gateway
 def s3connect( config_file ):
     "Connect to given s3 gateway using config file."
+    
     try:
         with open( config_file ) as cfg_file:    
             conn_data = json.load(cfg_file)
@@ -27,13 +28,14 @@ def s3connect( config_file ):
     conn = boto.connect_s3(
         aws_access_key_id=access_key,
         aws_secret_access_key=secret_key,
-        host=s3gw, port=port,                                                      	
+        host=s3gw, port=port,                                                          
         is_secure=False, calling_format=boto.s3.connection.OrdinaryCallingFormat(),
         )
     return conn; 
 
 def buck_list():
     "Get avaliable buckets."
+    
     print "Available buckets are:"
     for bucket in conn.get_all_buckets():
         print "{name} {created}".format(
@@ -43,12 +45,14 @@ def buck_list():
 
 def buck_add( buck_name ):
     "Create bucket"
+    
     buck = conn.create_bucket( buck_name )
     return buck;
 
 # Got from https://stackoverflow.com/questions/15085864/how-to-upload-a-file-to-directory-in-s3-bucket-using-boto
 def put_file( buck_name, file_name ):
     "Insert file to bucket. Create bucket if not exists."
+    
     buck = conn.create_bucket( buck_name )
     print 'Uploading %s to bucket %s' % \
     (file_name, buck)
@@ -65,6 +69,7 @@ def put_file( buck_name, file_name ):
 # Got from http://docs.ceph.com/docs/master/radosgw/s3/python/
 def buck_cont( buck_name ):
     "View bucket contents. Create bucket if not exists."
+    
     buck = conn.create_bucket( buck_name ) # Createing bucket to list it? need to find another way to connect
     #buck = conn.create_bucket( buck_name )
     for key in buck.list():
@@ -76,6 +81,7 @@ def buck_cont( buck_name ):
 
 def buck_dump( buck_name, dump_path ):
     "Retreive bucket  contents and  store it as  files."
+    
     buck = conn.create_bucket( buck_name ) # Createing bucket to list it? need to find another way to connect
     for key in buck.list():
         buck.get_key( 'key' )
@@ -96,5 +102,5 @@ bucket = conn.get_bucket('my-new-container')
 acl = bucket.get_acl()
 acl
 bucket.set_acl('public-read')
-bucket.set	_acl('public-read','hello.txt')
+bucket.set    _acl('public-read','hello.txt')
 '''
