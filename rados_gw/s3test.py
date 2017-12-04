@@ -64,7 +64,7 @@ def put_file( buck_name, file_name ):
 # Got from http://docs.ceph.com/docs/master/radosgw/s3/python/
 def buck_cont( buck_name ):
     "View bucket contents. Create bucket if not exists."
-    # buck = conn.create_bucket( buck_name ) # not need to create one more time. thus commented out.
+    buck = conn.create_bucket( buck_name ) # Createing bucket to list it? need to find another way to connect
     for key in buck.list():
         print "{name}\t{size}\t{modified}".format(
             name = key.name,
