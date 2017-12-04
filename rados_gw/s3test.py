@@ -80,6 +80,13 @@ def buck_dump( buck_name, dump_path ):
         buck.get_key( 'key' )
         key.get_contents_to_filename( dump_path  + key.name )
 
+def main():
+    s3connect( config_file = raw_input("Config file: ") )
+    buck_list() 
+
+if __name__ == '__main__':
+    main()
+
 
 # Access rights.
 # Got from http://boto.cloudhackers.com/en/latest/s3_tut.html
