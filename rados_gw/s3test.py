@@ -64,13 +64,20 @@ def put_file( buck_name, file_name ):
 # Got from http://docs.ceph.com/docs/master/radosgw/s3/python/
 def buck_cont( buck_name ):
     "View bucket contents. Create bucket if not exists."
-    buck = conn.create_bucket( buck_name )
+    # buck = conn.create_bucket( buck_name ) # not need to create one more time. thus commented out.
     for key in buck.list():
         print "{name}\t{size}\t{modified}".format(
             name = key.name,
             size = key.size,
             modified = key.last_modified,
         )
+
+def buck_dump( buck_name, dump_path ):
+    "Retreive bucket  contents and  store it as  files."
+    for key in buck.list():
+        bucket.get_key( 'key' )
+        key.get_contents_to_filename( dump_path  + key)
+
 
 # Access rights.
 # Got from http://boto.cloudhackers.com/en/latest/s3_tut.html
