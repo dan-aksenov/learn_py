@@ -22,11 +22,12 @@ def s3connect( config_file ):
     s3gw = conn_data['gateway']   
     access_key = conn_data['access_key']
     secret_key = conn_data['secret_key']
+    port = conn_data['port']
     global conn
     conn = boto.connect_s3(
         aws_access_key_id=access_key,
         aws_secret_access_key=secret_key,
-        host=s3gw, port=7480,                                                      	
+        host=s3gw, port=port,                                                      	
         is_secure=False, calling_format=boto.s3.connection.OrdinaryCallingFormat(),
         )
     return conn; 
@@ -38,7 +39,7 @@ def buck_list():
         print "{name} {created}".format(
             name=bucket.name,
             created=bucket.creation_date,
-       )
+        )
 
 def buck_add( buck_name ):
     "Create bucket"
