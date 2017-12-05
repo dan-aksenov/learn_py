@@ -69,6 +69,14 @@ def put_file( buck_name, file_name ):
     k.set_contents_from_filename(file_name,
         cb=percent_cb, num_cb=10)
 
+def del_file( buck_name, file_name ):
+    "Delete file from bucket."
+    
+    buck = conn.get_bucket( buck_name )
+    print 'Deleting %s from bucket %s' % \
+    (file_name, buck)
+    buck.delete_key(file_name)
+        
 # Got from http://docs.ceph.com/docs/master/radosgw/s3/python/
 def buck_cont( buck_name ):
     "View bucket contents. Create bucket if not exists."
@@ -98,10 +106,10 @@ def buck_dump_diff( buck_name, dump_path ):
     for key in buck.list():
         buck.get_key( 'key' )
         if os.path.isfile( dump_path + key.name):
-            #print "Object " + key.name + " already exists in " + dump_path
+            print "Object " + key.name + " already exists in " + dump_path
             skiped = skiped + 1
         else:
-            #print "Dumping " + key.name + " to + " dump_path
+            print "Dumping " + key.name + " to " +  dump_path
             key.get_contents_to_filename( dump_path  + key.name )
             dumped = dumped + 1
     print "Dumped new objects: " + str(dumped)
@@ -112,10 +120,10 @@ if __name__ == '__main__':
 
 # Access rights.
 # Got from http://boto.cloudhackers.com/en/latest/s3_tut.html
-'''
-bucket = conn.get_bucket('my-new-container')
-acl = bucket.get_acl()
-acl
-bucket.set_acl('public-read')
-bucket.set    _acl('public-read','hello.txt')
-'''
+def set_rights( buck_name , file_name):
+    "Set read rights to file."
+    
+    buck = conn.get_bucket(buck_name)
+    #acl = bucket.get_acl()
+    #bucket.set_acl('public-read')
+    bucket.set_acl('public-read', file_name)
