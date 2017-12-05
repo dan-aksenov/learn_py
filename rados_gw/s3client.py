@@ -5,6 +5,7 @@ Simple python script to connect to radosgw(ceph in my setup). Creating buckets, 
 import boto
 import boto.s3
 import sys
+import os
 import boto.s3.connection
 import json
 from boto.s3.key import Key
@@ -72,8 +73,7 @@ def put_file( buck_name, file_name ):
 def buck_cont( buck_name ):
     "View bucket contents. Create bucket if not exists."
     
-    buck = conn.create_bucket( buck_name ) # Createing bucket to list it? need to find another way to connect
-    #buck = conn.create_bucket( buck_name )
+    buck = conn.get_bucket( buck_name )
     for key in buck.list():
         print "{name}\t{size}\t{modified}".format(
             name = key.name,
@@ -81,14 +81,32 @@ def buck_cont( buck_name ):
             modified = key.last_modified,
         )
 
-def buck_dump( buck_name, dump_path ):
+def buck_dump_all( buck_name, dump_path ):
     "Retreive bucket  contents and  store it as  files."
     
-    buck = conn.create_bucket( buck_name ) # Createing bucket to list it? need to find another way to connect
+    buck = conn.get_bucket( buck_name )
     for key in buck.list():
         buck.get_key( 'key' )
         key.get_contents_to_filename( dump_path  + key.name )
 
+def buck_dump_diff( buck_name, dump_path ):
+    "Dump new buckets only, skip existing."
+
+    buck = conn.get_bucket( buck_name )
+    dumped = 0
+    skiped = 0
+    for key in buck.list():
+        buck.get_key( 'key' )
+        if os.path.isfile( dump_path + key.name):
+            #print "Object " + key.name + " already exists in " + dump_path
+            skiped = skiped + 1
+        else:
+            #print "Dumping " + key.name + " to + " dump_path
+            key.get_contents_to_filename( dump_path  + key.name )
+            dumped = dumped + 1
+    print "Dumped new objects: " + str(dumped)
+    print "Skiped existing objects: " + str(skiped)
+        
 if __name__ == '__main__':
     pass
 
