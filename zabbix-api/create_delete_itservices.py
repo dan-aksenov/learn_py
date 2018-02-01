@@ -10,7 +10,7 @@ zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix")
 zapi.login("Admin", "zabbix")
 
 def cre_master_service():
-# todo. dont create service if already exists!
+    # todo. dont create service if already exists!
     zapi.service.create({"name": v_master_service,"algorithm": 1,"showsla": 0,"sortorder": 1})
 
 # Create service block.
@@ -29,7 +29,7 @@ def cre_host_srv():
  
 def cre_trig_sev():
     ''' Для каждой услуги-узла создание потомков на основе триггеров '''
-    for i in range(0, len(	)):
+    for i in range(0, len(a_zabbix_agents)):
         # Get triggers for given agent.
         v_host_triggs = zapi.trigger.get({"filter":{"host": a_zabbix_agents[i]}})
         # Get parent serviceid.
