@@ -14,13 +14,15 @@ fines = []
 interacc = []
 nominal = []
 other = []
+errors = []
 
 returned_pattern = re.compile('\"*Частичный')
 pcts_pattern = re.compile('\"*(О|У)плата процентов')
 fines_pattern = re.compile('\"*(О|У)плата пени')
 interacc_pattern = re.compile('Внутрибанковский')
-other_pattern = re.compile('(\"*Частичный)|(\"*плата процентов)|(\"*плата пени)')
+#other_pattern = re.compile('(\"*Частичный)|(\"*плата процентов)|(\"*плата пени)')
 nominal_pattern = re.compile('^Пополнение номинального')
+errors_pattern = re.compile('Возврат ошибочно переведенных средств по займам')
 
 for row in b:
     if returned_pattern.match(row[1]):
@@ -33,8 +35,10 @@ for row in b:
 	    interacc.append(row[1])
     elif nominal_pattern.match(row[1]):
 	    nominal.append(row[1])
-	elif not other_pattern.match(row[1]):
-	   other.append(row[1])
+	elif errors_pattern.match(row[1]):
+	    errors.append(row[1])
+	else: #not other_pattern.match(row[1]):
+	    other.append(row[1])
 		
 print len(returned)
 print len(pcts)
