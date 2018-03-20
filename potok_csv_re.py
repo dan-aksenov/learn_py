@@ -51,10 +51,10 @@ for row in b:
 	    #other.append(row[1])
 		other.append(float_convert(row[2]))
 		
-print "returned: " + sum(returned)
-print "interest: " + sum(pcts)  
-print "fines " + sum(fines)
-print "in: "+ sum(interacc)
-print "errors: " + len(errors)
-print "others: " + len(other)
+print "returned: " + str(sum(returned))
+print "interest: " + str(sum(pcts))  
+print "fines " + str(sum(fines))
+#print "in: "+ str(sum(interacc))
+#print "errors: " + str(len(errors))
+#print "others: " + str(len(other))
 
