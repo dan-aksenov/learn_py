@@ -14,16 +14,14 @@ returned = []
 pcts = []
 fines = []
 interacc = []
-invest = []
+invested = []
 other = []
 errors = []
 
 returned_pattern = re.compile('выплата')
 pcts_pattern = re.compile('проценты')
 fines_pattern = re.compile('пени')
-#interacc_pattern = re.compile('Внутрибанковский')
-#other_pattern = re.compile('(\"*Частичный)|(\"*плата процентов)|(\"*плата пени)')
-invest_pattern = re.compile('инвестирование')
+invested_pattern = re.compile('инвестирование')
 
 def float_convert( input ):
     output = float(input.replace(',', '.'))
@@ -43,17 +41,16 @@ for row in b:
         elif fines_pattern.match(row[4]):
             #fines.append(row[1])
             fines.append(float_convert(row[3]))
-        elif invest_pattern.match(row[4]):
+        elif invested_pattern.match(row[4]):
             #nominal.append(row[1])
-            invest.append(float_convert(row[3]))
+            invested.append(float_convert(row[3]))
         else: #not other_pattern.match(row[1]):
             #other.append(row[1])
             other.append(float_convert(row[3]))
-        
-print str(sum(returned))
-print str(sum(pcts))  
-print str(sum(fines))
-#print "in: "+ str(sum(interacc))
-#print "errors: " + str(len(errors))
-#print "others: " + str(len(other))
 
+print 'From ' +	str(dt_start) + ' to ' + str(dt_end)		
+print 'Investad     : ' + str(sum(invested)) + '\n'			
+print 'Returded dept: ' + str(sum(returned))
+print 'Interest     : ' + str(sum(pcts))  
+print 'Fines        : ' + str(sum(fines))
+print 'Returned ALL : ' + str(sum(pcts)+sum(fines)+sum(returned))
