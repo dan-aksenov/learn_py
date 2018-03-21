@@ -41,11 +41,10 @@ for row in b:
         else:
             other.append(float_convert(row[3]))
 
-print 'From ' +	dt_start.strftime('%m.%d.%Y')
+print 'From ' +    dt_start.strftime('%m.%d.%Y')
 print 'To   ' + dt_end.strftime('%m.%d.%Y')
 print 'Invested     : ' + str(sum(invested)) + '\n'			
 print 'Returded dept: ' + str(sum(returned))
 print 'Interest     : ' + str(sum(pcts))  
 print 'Fines        : ' + str(sum(fines))
 print 'Returned ALL : ' + str(sum(pcts)+sum(fines)+sum(returned))
-
