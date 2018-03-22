@@ -43,9 +43,7 @@ def main():
             else:
                 other.append(float_convert(row[3]))
 
-    print 'From         :' +    dt_start.strftime('%d.%m.%Y')
-    print 'To           :' + dt_end.strftime('%d.%m.%Y')
-    print 'Invested     : ' + str(sum(invested)) + '\n'			
+    print 'Invested     : ' + str(sum(invested)) + '\n'            
     print 'Returded dept: ' + str(sum(returned))
     print 'Interest     : ' + str(sum(pcts))  
     print 'Fines        : ' + str(sum(fines))
