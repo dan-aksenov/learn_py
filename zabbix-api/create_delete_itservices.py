@@ -10,20 +10,33 @@ zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix")
 zapi.login("Admin", "zabbix")
 
 def cre_master_service():
-    # todo. dont create service if already exists!
-    zapi.service.create({"name": v_master_service,"algorithm": 1,"showsla": 0,"sortorder": 1})
+    # Check if master service already exists.
+    if not zapi.service.get({"output": "extend","filter":{"name":v_master_service}}):
+        zapi.service.create({"name": v_master_service,"algorithm": 1,"showsla": 0,"sortorder": 1})
+        print "Created Master service "+ v_master_service
+    elif zapi.service.get({"output": "extend","filter":{"name":v_master_service}}):
+        print "Master service " + v_master_service + " already exists."
+    else:
+        print "Something else."
 
 # Create service block.
 # Create parent services, based on host/agent names. Make them child of master service.
 def cre_host_srv():
     ''' Создание услуг на основе имен узлов сети, объявленных в массиве a_zabbix_agents '''
-    for i in range(0, len(a_zabbix_agents)):
+    #for i in range(0, len(a_zabbix_agents)):
+    for zabbix_agent in a_zabbix_agents:
         # Get master service id.
         v_parent_id = zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
         # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
-        v_service_create_result = zapi.service.create({"name": a_zabbix_agents[i],"algorithm": 1,"showsla": 0,"sortorder": 1})
-        # Update parents dependencies. Get service id from preivous command result.
-        zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
+        if not zapi.service.get({"output": "extend","filter":{"name":zabbix_agent}}):
+            v_service_create_result = zapi.service.create({"name": zabbix_agent,"algorithm": 1,"showsla": 0,"sortorder": 1})
+            # Update parents dependencies. Get service id from preivous command result.
+            zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
+            print("Created service " + zabbix_agent)
+        elif zapi.service.get({"output": "extend","filter":{"name":zabbix_agent}}):
+            print("Service " + zabbix_agent + " already exists.")
+        else:
+            print("Something else.")
 
 # Create trigger based services. Make them children of agetn/host services.
  
@@ -36,11 +49,17 @@ def cre_trig_sev():
         v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
         # Create service based on trigger for selected host to be run in loop.
         for i in range(0, len(v_host_triggs)):
-            # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
-            v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"showsla": 0,"sortorder": 1,"triggerid": v_host_triggs[i]['triggerid']})
-            #v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"sortorder": 1,"showsla": 1,"goodsla": 99.99,"triggerid": v_host_triggs[i]['triggerid']})
-            # Update parents dependencies. Get service id from preivous command result.
-            zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
+            #check if service for this triggerid already exists
+            if not zapi.service.get({"output": "extend","filter":{"triggerid":v_host_triggs[i]['triggerid']}}):
+                # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
+                v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"showsla": 0,"sortorder": 1,"triggerid": v_host_triggs[i]['triggerid']})
+                # Update parents dependencies. Get service id from preivous command result.
+                zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
+                print "Creating service for trigger."
+            elif zapi.service.get({"output": "extend","filter":{"triggerid":v_host_triggs[i]['triggerid']}}):
+                print "Service for trigger already exists."
+            else:
+                print "Something else..."
 
 # Delete block.
 # Delete trigger-services.
@@ -67,6 +86,7 @@ def del_host_srv():
 
 def main():
     # Master service. Here based on IT product name.
+    # TODO: get rid of this. Redo in OOP.
     global v_master_service
     v_master_service = raw_input("Enter master service name: ")
     
