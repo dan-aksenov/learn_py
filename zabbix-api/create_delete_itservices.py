@@ -9,24 +9,24 @@ from zabbix_api import ZabbixAPI
 zapi = ZabbixAPI(server="http://oemcc.fors.ru/zabbix")
 zapi.login("Admin", "zabbix")
 
-def cre_master_service():
+def cre_master_service( master_service_name ):
     # Check if master service already exists.
-    if not zapi.service.get({"output": "extend","filter":{"name":v_master_service}}):
-        zapi.service.create({"name": v_master_service,"algorithm": 1,"showsla": 0,"sortorder": 1})
-        print "Created Master service "+ v_master_service
-    elif zapi.service.get({"output": "extend","filter":{"name":v_master_service}}):
-        print "Master service " + v_master_service + " already exists."
+    if not zapi.service.get({"output": "extend","filter":{"name":master_service_name}}):
+        zapi.service.create({"name": master_service_name,"algorithm": 1,"showsla": 0,"sortorder": 1})
+        print "Created Master service "+ master_service_name
+    elif zapi.service.get({"output": "extend","filter":{"name":master_service_name}}):
+        print "Master service " + master_service_name + " already exists."
     else:
         print "Something else."
 
 # Create service block.
 # Create parent services, based on host/agent names. Make them child of master service.
-def cre_host_srv():
+def cre_host_srv( master_service_name ):
     ''' Создание услуг на основе имен узлов сети, объявленных в массиве a_zabbix_agents '''
     #for i in range(0, len(a_zabbix_agents)):
     for zabbix_agent in a_zabbix_agents:
         # Get master service id.
-        v_parent_id = zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
+        v_parent_id = zapi.service.get({"filter":{"name": master_service_name}})[0]['serviceid']
         # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
         if not zapi.service.get({"output": "extend","filter":{"name":zabbix_agent}}):
             v_service_create_result = zapi.service.create({"name": zabbix_agent,"algorithm": 1,"showsla": 0,"sortorder": 1})
@@ -87,16 +87,16 @@ def del_host_srv():
 def main():
     # Master service. Here based on IT product name.
     # TODO: get rid of this. Redo in OOP.
-    global v_master_service
-    v_master_service = raw_input("Enter master service name: ")
+    global master_service_name
+    master_service_name = raw_input("Enter master service name: ")
     
     global a_zabbix_agents
     # Set parent it-service name. In this setup its the same as agent's/host name.
     zabbix_agents = raw_input("Enter space separated list of zabbix agents: ")
     a_zabbix_agents = zabbix_agents.split()
         
-    cre_master_service()
-    cre_host_srv()
+    cre_master_service(master_service_name)
+    cre_host_srv(master_service_name)
     cre_trig_sev()
     
 if __name__ == '__main__':
