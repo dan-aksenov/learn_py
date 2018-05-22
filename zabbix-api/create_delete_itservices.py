@@ -86,8 +86,6 @@ def del_host_srv():
 
 def main():
     # Master service. Here based on IT product name.
-    # TODO: get rid of this. Redo in OOP.
-    global master_service_name
     master_service_name = raw_input("Enter master service name: ")
     
     global a_zabbix_agents
