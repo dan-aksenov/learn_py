@@ -21,10 +21,10 @@ def cre_master_service( master_service_name ):
 
 # Create service block.
 # Create parent services, based on host/agent names. Make them child of master service.
-def cre_host_srv( master_service_name ):
-    ''' Создание услуг на основе имен узлов сети, объявленных в массиве a_zabbix_agents '''
+def cre_host_srv( master_service_name, zabbix_agents ):
+    ''' Создание услуг на основе имен узлов сети, объявленных в массиве zabbix_agents '''
     #for i in range(0, len(a_zabbix_agents)):
-    for zabbix_agent in a_zabbix_agents:
+    for zabbix_agent in zabbix_agents:
         # Get master service id.
         v_parent_id = zapi.service.get({"filter":{"name": master_service_name}})[0]['serviceid']
         # Variable v_service_create_result to hold service creation result. This will be used to get serviceid for dependencies update.
@@ -40,13 +40,13 @@ def cre_host_srv( master_service_name ):
 
 # Create trigger based services. Make them children of agetn/host services.
  
-def cre_trig_sev():
+def cre_trig_sev(zabbix_agents):
     ''' Для каждой услуги-узла создание потомков на основе триггеров '''
-    for i in range(0, len(a_zabbix_agents)):
+    for i in range(0, len(zabbix_agents)):
         # Get triggers for given agent.
-        v_host_triggs = zapi.trigger.get({"filter":{"host": a_zabbix_agents[i]}})
+        v_host_triggs = zapi.trigger.get({"filter":{"host": zabbix_agents[i]}})
         # Get parent serviceid.
-        v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
+        v_parent_id =  zapi.service.get({"filter":{"name": zabbix_agents[i]}})[0]['serviceid']
         # Create service based on trigger for selected host to be run in loop.
         for i in range(0, len(v_host_triggs)):
             #check if service for this triggerid already exists
@@ -63,11 +63,11 @@ def cre_trig_sev():
 
 # Delete block.
 # Delete trigger-services.
-def del_trig_srv():
+def del_trig_srv(zabbix_agents):
     ''' Удаление услуг на основе триггеров'''
-    for i in range(0, len(a_zabbix_agents)):
+    for i in range(0, len(zabbix_agents)):
         # Get serviceid.
-        v_parent_id =  zapi.service.get({"filter":{"name": a_zabbix_agents[i]}})[0]['serviceid']
+        v_parent_id =  zapi.service.get({"filter":{"name": zabbix_agents[i]}})[0]['serviceid']
         # Get his children.
         v_children =  zapi.service.get({"parentids": v_parent_id})
         for i in range(0, len(v_children)):
@@ -79,7 +79,7 @@ def del_trig_srv():
 # Delete host-services.
 def del_host_srv():
     ''' Удаление услуг на основе узлов сети '''
-    for i in range(0, len(a_zabbix_agents)):
+    for i in range(0, len(zabbix_agents)):
         # Get serviceid.
         v_service_id =  zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
         zapi.service.delete([v_service_id])
@@ -88,14 +88,14 @@ def main():
     # Master service. Here based on IT product name.
     master_service_name = raw_input("Enter master service name: ")
     
-    global a_zabbix_agents
+    #global a_zabbix_agents
     # Set parent it-service name. In this setup its the same as agent's/host name.
     zabbix_agents = raw_input("Enter space separated list of zabbix agents: ")
-    a_zabbix_agents = zabbix_agents.split()
+    zabbix_agents = zabbix_agents.split()
         
     cre_master_service(master_service_name)
-    cre_host_srv(master_service_name)
-    cre_trig_sev()
+    cre_host_srv(master_service_name,zabbix_agents)
+    cre_trig_sev(zabbix_agents)
     
 if __name__ == '__main__':
     main()
