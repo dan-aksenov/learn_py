@@ -94,8 +94,7 @@ def main():
     # Set parent it-service name. In this setup its the same as agent's/host name.
     zabbix_agents = raw_input("Enter space separated list of zabbix agents: ")
     a_zabbix_agents = zabbix_agents.split()
-    #a_zabbix_agents = ['oati-wl-02','oati-wl-01','oati-test-db','oati-test-app','oati-db-02','oati-db-01','oati-bpm-01','oati-bi-01','oati-bal-01']
-    
+        
     cre_master_service()
     cre_host_srv()
     cre_trig_sev()
