@@ -55,9 +55,9 @@ def cre_trig_sev(zabbix_agents):
                 v_service_create_result = zapi.service.create({"name": v_host_triggs[i]['description'],"algorithm": 1,"showsla": 0,"sortorder": 1,"triggerid": v_host_triggs[i]['triggerid']})
                 # Update parents dependencies. Get service id from preivous command result.
                 zapi.service.update({"serviceid": v_service_create_result['serviceids'][0],"parentid": v_parent_id})
-                print "Creating service for trigger."
+                #print "Creating service for trigger " + v_host_tirggs[i]['triggerid']
             elif zapi.service.get({"output": "extend","filter":{"triggerid":v_host_triggs[i]['triggerid']}}):
-                print "Service for trigger already exists."
+                print "Service for trigger " + v_host_triggs[i]['triggerid'] + " already exists."
             else:
                 print "Something else..."
 
