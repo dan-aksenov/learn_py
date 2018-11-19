@@ -76,7 +76,7 @@ def del_trig_srv(zabbix_agents):
             # Array mast be used to service.delete.
             zapi.service.delete([v_child_id])
 
-# Delete host-services. -- to be fixed, and error handling added
+# Delete host-services. -- to be fixed, and error handling added    
 def del_host_srv(zabbix_agents):
     ''' Удаление услуг на основе узлов сети '''
     for i in range(0, len(zabbix_agents)):
