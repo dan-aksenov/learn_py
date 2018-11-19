@@ -76,12 +76,12 @@ def del_trig_srv(zabbix_agents):
             # Array mast be used to service.delete.
             zapi.service.delete([v_child_id])
 
-# Delete host-services.
-def del_host_srv():
+# Delete host-services. -- to be fixed, and error handling added
+def del_host_srv(zabbix_agents):
     ''' Удаление услуг на основе узлов сети '''
     for i in range(0, len(zabbix_agents)):
         # Get serviceid.
-        v_service_id =  zapi.service.get({"filter":{"name": v_master_service}})[0]['serviceid']
+        v_service_id =  zapi.service.get({"filter":{"name": zabbix_agents[i]}})[0]['serviceid']
         zapi.service.delete([v_service_id])
 
 def main():
