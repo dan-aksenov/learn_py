@@ -24,7 +24,13 @@ def insertdb():
    cur.execute("""insert into test1(c1) values (%s)""", e.get() )
    conn.commit()
 b = Tkinter.Button(top, text='commit', command = insertdb)
+
+def deletedb():
+   cur.execute("""delete from test1""")
+   conn.commit()
+a = Tkinter.Button(top, text='delete', command = deletedb)
 b.pack()
+a.pack()
 w = Listbox(top)
 w.pack(side = RIGHT)
 for row in rows:
