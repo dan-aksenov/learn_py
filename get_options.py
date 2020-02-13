@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python3
 import sys,  getopt
 
 opts, args = getopt.getopt(sys.argv[1:], 'a:b:')
@@ -9,4 +9,4 @@ for opt, arg in opts:
     elif opt in ('-b'):
         b = arg
 
-print "a is: " + a + ", b is: " + b
+print( "a is: " + a + ", b is: " + b )
