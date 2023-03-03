@@ -2,3 +2,12 @@
 *.pyc
 bash.exe.stackdump
 .vscode/*
+
+# bak
+*.bak
+
+# log
+*.log
+
+venv
+*.xlsx

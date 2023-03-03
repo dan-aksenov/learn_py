@@ -1,1 +1,4 @@
 xlsxwriter
+openpyxl
+pandas
+ipython
