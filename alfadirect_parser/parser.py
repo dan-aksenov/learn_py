@@ -11,4 +11,6 @@ for i in doc.iter('{TaxAppendix}Details'):
 
 xmlToDf = pd.DataFrame(all_items)
 
-xmlToDf.to_csv('/tmp/alfa.csv',encoding='utf-8',index=False)
+print(xmlToDf.to_csv())
+# как правльно загрузить кириллицу в маковский эксель?
+#xmlToDf.to_csv('/tmp/alfa.csv',encoding='utf-8',index=False)
